@@ -541,6 +541,19 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
+    <StackLayout key="layout-applications-sled-video" maxWidth="xl">
+        <Block id="applications-sled-video" padding="sm">
+            <VideoDisplay
+                id="video-water-ski-tow"
+                src="https://upload.wikimedia.org/wikipedia/commons/3/3f/15_Knoten_%28Wasserski%29.webm"
+                alt="A water skier being towed behind a boat on a long rope"
+                caption="The same split, at speed. The tow rope runs up from the skier to the boat, so part of the pull drives them forward and part holds them up. Video: Rhetos, CC BY-SA 4.0."
+                controls
+                aspectRatio="16/9"
+            />
+        </Block>
+    </StackLayout>,
+
     <StackLayout key="layout-applications-joystick" maxWidth="xl">
         <Block id="applications-joystick" padding="sm">
             <EditableParagraph id="para-applications-joystick" blockId="applications-joystick">
