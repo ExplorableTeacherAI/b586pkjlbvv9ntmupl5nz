@@ -20,6 +20,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -291,10 +292,10 @@ export const triangleInCircleBlocks: ReactElement[] = [
 
     <StackLayout key="layout-triangle-setup" maxWidth="xl">
         <Block id="triangle-setup" padding="sm">
-            <EditableParagraph id="para-triangle-setup" blockId="triangle-setup">
-                Take a circle of radius 1 with its centre at the origin, and mark a point on the rim
-                at an angle θ from the positive x-axis. Drag that teal point around the rim and a
-                right-angled triangle follows it everywhere, with the radius itself as the hypotenuse.
+            <EditableParagraph id="para-triangle-setup" blockId="triangle-setup" className={POINT_LIST_CLASS}>
+                <Point>A circle of radius 1, centred on the origin, with a point on the rim at an angle θ from the positive x-axis.</Point>
+                <Point>Drag that teal point around the rim and a right-angled triangle follows it everywhere.</Point>
+                <Point>The radius itself is always the hypotenuse.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -307,31 +308,39 @@ export const triangleInCircleBlocks: ReactElement[] = [
 
     <StackLayout key="layout-triangle-coordinates" maxWidth="xl">
         <Block id="triangle-coordinates" padding="sm">
-            <EditableParagraph id="para-triangle-coordinates" blockId="triangle-coordinates">
-                At θ ={" "}
-                <InlineScrubbleNumber
-                    varName="unitCircleAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
-                    formatValue={(v) => `${Math.round(v)}°`}
-                />
-                {" "}the slanted side is still exactly 1 unit long, which makes SOH CAH TOA unusually
-                kind. Since cos θ = adjacent ÷ 1, the{" "}
-                <InlineLinkedHighlight
-                    varName="unitCircleHighlight"
-                    highlightId="cos"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("unitCircleCosHighlight"))}
-                >
-                    flat side
-                </InlineLinkedHighlight>
-                {" "}is simply cos θ, and the{" "}
-                <InlineLinkedHighlight
-                    varName="unitCircleHighlight"
-                    highlightId="sin"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("unitCircleSinHighlight"))}
-                >
-                    upright side
-                </InlineLinkedHighlight>
-                {" "}is sin θ. The point is sitting at (cos θ, sin θ).
+            <EditableParagraph id="para-triangle-coordinates" blockId="triangle-coordinates" className={POINT_LIST_CLASS}>
+                <Point>
+                    At θ ={" "}
+                    <InlineScrubbleNumber
+                        varName="unitCircleAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    {" "}the slanted side is still exactly 1 unit long, which makes SOH CAH TOA unusually kind.
+                </Point>
+                <Point>
+                    cos θ = adjacent ÷ 1, so the{" "}
+                    <InlineLinkedHighlight
+                        varName="unitCircleHighlight"
+                        highlightId="cos"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("unitCircleCosHighlight"))}
+                    >
+                        flat side
+                    </InlineLinkedHighlight>
+                    {" "}is simply cos θ.
+                </Point>
+                <Point>
+                    sin θ = opposite ÷ 1, so the{" "}
+                    <InlineLinkedHighlight
+                        varName="unitCircleHighlight"
+                        highlightId="sin"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("unitCircleSinHighlight"))}
+                    >
+                        upright side
+                    </InlineLinkedHighlight>
+                    {" "}is sin θ.
+                </Point>
+                <Point>So the point is sitting at (cos θ, sin θ).</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -344,9 +353,9 @@ export const triangleInCircleBlocks: ReactElement[] = [
 
     <StackLayout key="layout-triangle-hook" maxWidth="xl">
         <Block id="triangle-hook" padding="sm">
-            <EditableParagraph id="para-triangle-hook" blockId="triangle-hook">
-                Which raises a question worth chasing. If both sides hang off the same slanted side
-                of length 1, can they really change independently?
+            <EditableParagraph id="para-triangle-hook" blockId="triangle-hook" className={POINT_LIST_CLASS}>
+                <Point>Both sides hang off the same slanted side of length 1.</Point>
+                <Point>So can they really change independently?</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

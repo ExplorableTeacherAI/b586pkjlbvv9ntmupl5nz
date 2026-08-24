@@ -20,6 +20,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -380,15 +381,18 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
 
     <StackLayout key="layout-notation-setup" maxWidth="xl">
         <Block id="notation-setup" padding="sm">
-            <EditableParagraph id="para-notation-setup" blockId="notation-setup">
-                Before anything else, one piece of shorthand that trips people up. At θ ={" "}
-                <InlineScrubbleNumber
-                    varName="notationAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
-                    formatValue={(v) => `${Math.round(v)}°`}
-                />
-                , two innocent-looking expressions sit on the number line below. Drop each marker
-                where you think its value lands.
+            <EditableParagraph id="para-notation-setup" blockId="notation-setup" className={POINT_LIST_CLASS}>
+                <Point>One piece of shorthand trips almost everyone up: sin²θ and sin(θ²).</Point>
+                <Point>
+                    At θ ={" "}
+                    <InlineScrubbleNumber
+                        varName="notationAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    , both of them land somewhere on the number line below.
+                </Point>
+                <Point>Drop each marker where you think its value sits.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -401,17 +405,19 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
 
     <StackLayout key="layout-notation-explanation" maxWidth="xl">
         <Block id="notation-explanation" padding="sm">
-            <EditableParagraph id="para-notation-explanation" blockId="notation-explanation">
-                <InlineLinkedHighlight
-                    varName="notationHighlight"
-                    highlightId="sinSquared"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("notationHighlight"))}
-                >
-                    sin²θ
-                </InlineLinkedHighlight>
-                {" "}means the sine first, then squared, so it never escapes the stretch from 0 to 1.
-                Squaring the angle instead sends the answer anywhere on the line, negatives included.
-                Two brackets are all that separate them.
+            <EditableParagraph id="para-notation-explanation" blockId="notation-explanation" className={POINT_LIST_CLASS}>
+                <Point>
+                    <InlineLinkedHighlight
+                        varName="notationHighlight"
+                        highlightId="sinSquared"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("notationHighlight"))}
+                    >
+                        sin²θ
+                    </InlineLinkedHighlight>
+                    {" "}takes the sine first, then squares it, so it never escapes the stretch from 0 to 1.
+                </Point>
+                <Point>sin(θ²) squares the angle first, which sends the answer anywhere on the line, negatives included.</Point>
+                <Point>Two brackets are all that separate them.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

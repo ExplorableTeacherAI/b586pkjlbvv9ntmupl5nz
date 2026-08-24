@@ -18,6 +18,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 const INK = "#334155";
 const INK_STRUCTURE = "#64748B";
@@ -503,22 +504,26 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
 
     <StackLayout key="layout-applications-sled" maxWidth="xl">
         <Block id="applications-sled" padding="sm">
-            <EditableParagraph id="para-applications-sled" blockId="applications-sled">
-                None of this is stuck inside a maths lesson. Drag a weight sled with the rope at θ ={" "}
-                <InlineScrubbleNumber
-                    varName="sledAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("sledAngle"))}
-                    formatValue={(v) => `${Math.round(v)}°`}
-                />
-                {" "}and the pull splits in two: some of it drags the sled forward, the rest just{" "}
-                <InlineLinkedHighlight
-                    varName="sledHighlight"
-                    highlightId="lift"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("sledHighlight"))}
-                >
-                    lifts it
-                </InlineLinkedHighlight>
-                . Raise the handle and watch the two parts trade size.
+            <EditableParagraph id="para-applications-sled" blockId="applications-sled" className={POINT_LIST_CLASS}>
+                <Point>None of this is stuck inside a maths lesson.</Point>
+                <Point>
+                    Drag a weight sled with the rope at θ ={" "}
+                    <InlineScrubbleNumber
+                        varName="sledAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("sledAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    {" "}and the pull splits in two: some of it drags the sled forward, the rest just{" "}
+                    <InlineLinkedHighlight
+                        varName="sledHighlight"
+                        highlightId="lift"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("sledHighlight"))}
+                    >
+                        lifts it
+                    </InlineLinkedHighlight>
+                    .
+                </Point>
+                <Point>Raise the handle and the two parts trade size.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -531,10 +536,10 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
 
     <StackLayout key="layout-applications-joystick" maxWidth="xl">
         <Block id="applications-joystick" padding="sm">
-            <EditableParagraph id="para-applications-joystick" blockId="applications-joystick">
-                A game controller runs the same maths thousands of times a second. Swing the knob and
-                your character's speed is shared out between across and up, yet the brick reaches the
-                ring in the same time whichever way you point.
+            <EditableParagraph id="para-applications-joystick" blockId="applications-joystick" className={POINT_LIST_CLASS}>
+                <Point>A game controller runs the same maths thousands of times a second.</Point>
+                <Point>Swing the knob and your character's speed is shared out between across and up.</Point>
+                <Point>Yet the brick reaches the ring in the same time whichever way you point.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

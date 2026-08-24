@@ -20,6 +20,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -406,16 +407,18 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-setup" maxWidth="xl">
         <Block id="squares-setup" padding="sm">
-            <EditableParagraph id="para-squares-setup" blockId="squares-setup">
-                Pythagoras says the two shorter sides of a right triangle, each squared, add up to the
-                hypotenuse squared. Our triangle has sides cos θ and sin θ and a hypotenuse of 1. At θ
-                ={" "}
-                <InlineScrubbleNumber
-                    varName="unitCircleAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
-                    formatValue={(v) => `${Math.round(v)}°`}
-                />
-                , drag both squares across into the empty square of side 1 and see whether they fit.
+            <EditableParagraph id="para-squares-setup" blockId="squares-setup" className={POINT_LIST_CLASS}>
+                <Point>Pythagoras: the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared.</Point>
+                <Point>Our triangle has sides cos θ and sin θ, and a hypotenuse of 1.</Point>
+                <Point>
+                    At θ ={" "}
+                    <InlineScrubbleNumber
+                        varName="unitCircleAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    , drag both squares across into the empty square of side 1 and see whether they fit.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -437,29 +440,33 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-reflection" maxWidth="xl">
         <Block id="squares-reflection" padding="sm">
-            <EditableParagraph id="para-squares-reflection" blockId="squares-reflection">
-                They always fit, at every angle, because the{" "}
-                <InlineLinkedHighlight
-                    varName="squaresHighlight"
-                    highlightId="sin"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("squaresHighlight"))}
-                    color={SIN_HUE}
-                    bgColor="rgba(172, 139, 249, 0.20)"
-                >
-                    upright square
-                </InlineLinkedHighlight>
-                {" "}grows by exactly what the flat one loses. That is the identity: not a rule to
-                memorise, but Pythagoras with a hypotenuse of 1.
+            <EditableParagraph id="para-squares-reflection" blockId="squares-reflection" className={POINT_LIST_CLASS}>
+                <Point>They fit at every angle, with nothing left over and no gap.</Point>
+                <Point>
+                    The{" "}
+                    <InlineLinkedHighlight
+                        varName="squaresHighlight"
+                        highlightId="sin"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("squaresHighlight"))}
+                        color={SIN_HUE}
+                        bgColor="rgba(172, 139, 249, 0.20)"
+                    >
+                        upright square
+                    </InlineLinkedHighlight>
+                    {" "}grows by exactly what the flat one loses.
+                </Point>
+                <Point>So the identity is not a rule to memorise: it is Pythagoras with a hypotenuse of 1.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
 
     <StackLayout key="layout-squares-question-identity" maxWidth="xl">
         <Block id="squares-question-identity" padding="sm">
-            <EditableParagraph id="para-squares-question-identity" blockId="squares-question-identity">
+            <EditableParagraph id="para-squares-question-identity" blockId="squares-question-identity" className={POINT_LIST_CLASS}>
                 <RevealOnInteraction varName="squaresExplored">
-                    An acute angle has cos θ = 0.6, so cos²θ = 0.36. For the identity to hold, sin²θ
-                    must be{" "}
+                    <Point>An acute angle has cos θ = 0.6, so cos²θ = 0.36.</Point>
+                    <Point>
+                    For the identity to hold, sin²θ must be{" "}
                     <InlineFeedback
                         varName="answerSquaresIdentity"
                         correctValue={["0.64", ".64", "16/25"]}
@@ -491,6 +498,7 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
                             {...clozePropsFromDefinition(getVariableInfo("answerSquaresIdentity"))}
                         />
                     </InlineFeedback>.
+                    </Point>
                 </RevealOnInteraction>
             </EditableParagraph>
         </Block>

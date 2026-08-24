@@ -22,6 +22,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -314,11 +315,11 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
 
     <StackLayout key="layout-apply-setup" maxWidth="xl">
         <Block id="apply-setup" padding="sm">
-            <EditableParagraph id="para-apply-setup" blockId="apply-setup">
-                The identity earns its keep the moment you know one ratio and need the other. Suppose
-                cos θ = 0.6: then sin²θ = 1 − 0.36 = 0.64, so sin θ = ±0.8. Steer the teal dot round
-                the rim until its dashed line lands on the amber target, then go hunting for the
-                second spot that hits it too.
+            <EditableParagraph id="para-apply-setup" blockId="apply-setup" className={POINT_LIST_CLASS}>
+                <Point>The identity earns its keep the moment you know one ratio and need the other.</Point>
+                <Point>Say cos θ = 0.6: then sin²θ = 1 − 0.36 = 0.64, so sin θ = ±0.8.</Point>
+                <Point>Steer the teal dot round the rim until its dashed line lands on the amber target.</Point>
+                <Point>Then go hunting for the second spot that hits it too.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -340,22 +341,27 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
 
     <StackLayout key="layout-apply-sign" maxWidth="xl">
         <Block id="apply-sign" padding="sm">
-            <EditableParagraph id="para-apply-sign" blockId="apply-sign">
-                That ± is not the maths being vague. Two points on the circle share a cosine of{" "}
-                <InlineScrubbleNumber
-                    varName="applyTargetCos"
-                    {...numberPropsFromDefinition(getVariableInfo("applyTargetCos"))}
-                    formatValue={(v) => v.toFixed(2)}
-                />
-                , one above the axis and one below, and{" "}
-                <InlineLinkedHighlight
-                    varName="applyHighlight"
-                    highlightId="sin"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("applyHighlight"))}
-                >
-                    their sines
-                </InlineLinkedHighlight>
-                {" "}are opposite. Knowing the quadrant is what tells you which sign to keep.
+            <EditableParagraph id="para-apply-sign" blockId="apply-sign" className={POINT_LIST_CLASS}>
+                <Point>That ± is not the maths being vague.</Point>
+                <Point>
+                    Two points on the circle share a cosine of{" "}
+                    <InlineScrubbleNumber
+                        varName="applyTargetCos"
+                        {...numberPropsFromDefinition(getVariableInfo("applyTargetCos"))}
+                        formatValue={(v) => v.toFixed(2)}
+                    />
+                    , one above the axis and one below.
+                </Point>
+                <Point>
+                    <InlineLinkedHighlight
+                        varName="applyHighlight"
+                        highlightId="sin"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("applyHighlight"))}
+                    >
+                        Their sines
+                    </InlineLinkedHighlight>
+                    {" "}are opposite, so knowing the quadrant is what tells you which sign to keep.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

@@ -22,6 +22,7 @@ import {
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
+import { Point, POINT_LIST_CLASS } from "./pointList";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -346,10 +347,10 @@ export const turningPastNinetyBlocks: ReactElement[] = [
 
     <StackLayout key="layout-quadrants-setup" maxWidth="xl">
         <Block id="quadrants-setup" padding="sm">
-            <EditableParagraph id="para-quadrants-setup" blockId="quadrants-setup">
-                A right-angled triangle runs out of angles at 90°, but a turntable does not. Walk the
-                teal dot on past the top of the circle and into the second quadrant, where the
-                horizontal distance is now measured to the left.
+            <EditableParagraph id="para-quadrants-setup" blockId="quadrants-setup" className={POINT_LIST_CLASS}>
+                <Point>A right-angled triangle runs out of angles at 90°. A turntable does not.</Point>
+                <Point>Walk the teal dot on past the top of the circle and into the second quadrant.</Point>
+                <Point>The horizontal distance is now measured to the left.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -362,34 +363,37 @@ export const turningPastNinetyBlocks: ReactElement[] = [
 
     <StackLayout key="layout-quadrants-signs" maxWidth="xl">
         <Block id="quadrants-signs" padding="sm">
-            <EditableParagraph id="para-quadrants-signs" blockId="quadrants-signs">
-                Sine and cosine are coordinates, not lengths, so they are quite happy being negative,
-                and the{" "}
-                <InlineLinkedHighlight
-                    varName="quadrantHighlight"
-                    highlightId="cos"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("quadrantHighlight"))}
-                >
-                    cosine bar
-                </InlineLinkedHighlight>
-                {" "}dips below its zero line as soon as the dot crosses the top. Squaring, though,
-                wipes the sign out completely. Whichever quadrant the dot wanders into, sin²θ + cos²θ
-                still comes to exactly 1.
+            <EditableParagraph id="para-quadrants-signs" blockId="quadrants-signs" className={POINT_LIST_CLASS}>
+                <Point>Sine and cosine are coordinates, not lengths, so they are quite happy being negative.</Point>
+                <Point>
+                    The{" "}
+                    <InlineLinkedHighlight
+                        varName="quadrantHighlight"
+                        highlightId="cos"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("quadrantHighlight"))}
+                    >
+                        cosine bar
+                    </InlineLinkedHighlight>
+                    {" "}dips below its zero line as soon as the dot crosses the top.
+                </Point>
+                <Point>Squaring wipes the sign out, so sin²θ + cos²θ still comes to exactly 1 in every quadrant.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
 
     <StackLayout key="layout-quadrants-range" maxWidth="xl">
         <Block id="quadrants-range" padding="sm">
-            <EditableParagraph id="para-quadrants-range" blockId="quadrants-range">
-                At θ ={" "}
-                <InlineScrubbleNumber
-                    varName="quadrantAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("quadrantAngle"))}
-                    formatValue={(v) => `${Math.round(v)}°`}
-                />
-                {" "}or any other angle you like, neither coordinate can escape the range −1 to 1,
-                because the radius is pinned at 1.
+            <EditableParagraph id="para-quadrants-range" blockId="quadrants-range" className={POINT_LIST_CLASS}>
+                <Point>
+                    At θ ={" "}
+                    <InlineScrubbleNumber
+                        varName="quadrantAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("quadrantAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    , or any other angle you like, neither coordinate escapes the range −1 to 1.
+                </Point>
+                <Point>The reason: the radius is pinned at 1.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
