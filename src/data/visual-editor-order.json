@@ -10,8 +10,8 @@
     "notation-visual",
     "triangle-heading",
     "triangle-setup",
-    "triangle-visual",
     "triangle-coordinates",
+    "triangle-visual",
     "triangle-formula",
     "triangle-hook",
     "triangle-question-coordinate",
@@ -135,7 +135,8 @@
       "type": "split",
       "columns": [
         [
-          "triangle-setup"
+          "triangle-setup",
+          "triangle-coordinates"
         ],
         [
           "triangle-visual"
@@ -146,18 +147,6 @@
         "gap": "lg",
         "reverse": false,
         "align": "start"
-      }
-    },
-    {
-      "id": "layout-triangle-coordinates",
-      "type": "stack",
-      "columns": [
-        [
-          "triangle-coordinates"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
       }
     },
     {
