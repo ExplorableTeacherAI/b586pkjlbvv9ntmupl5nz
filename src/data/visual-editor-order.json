@@ -33,7 +33,6 @@
     "applications-heading",
     "applications-sled",
     "applications-sled-figure",
-    "applications-sled-video",
     "applications-joystick",
     "applications-joystick-photo",
     "applications-joystick-figure",
@@ -344,18 +343,6 @@
       "columns": [
         [
           "applications-sled-figure"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-applications-sled-video",
-      "type": "stack",
-      "columns": [
-        [
-          "applications-sled-video"
         ]
       ],
       "props": {
