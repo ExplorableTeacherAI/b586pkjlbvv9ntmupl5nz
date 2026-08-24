@@ -351,49 +351,6 @@ export const triangleInCircleBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-triangle-question-coordinate" maxWidth="xl">
-        <Block id="triangle-question-coordinate" padding="sm">
-            <EditableParagraph id="para-triangle-question-coordinate" blockId="triangle-question-coordinate">
-                <RevealOnInteraction varName="triangleExplored">
-                    A different point on this same circle sits at (0.28, 0.96). For that angle, cos θ
-                    must be{" "}
-                    <InlineFeedback
-                        varName="answerTriangleCos"
-                        correctValue="0.28"
-                        position="terminal"
-                        successMessage="— yes, cosine is the across coordinate, whatever the angle happens to be"
-                        failureMessage="— not quite."
-                        hint="Cosine came from the flat side, so it is the first number in the pair"
-                        visualizationHint={{
-                            blockId: "triangle-visual",
-                            hintKey: "feedback-triangle-cos-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-circular",
-                                    label: "Drag the teal point up until the upright side reads 0.96",
-                                    position: { x: "45%", y: "35%" },
-                                    dragPath: { type: "arc", startAngle: -35, endAngle: -74, radius: 38 },
-                                    completionVar: "unitCircleAngle",
-                                    completionValue: 74,
-                                    completionTolerance: 5,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { unitCircleAngle: 35 },
-                        }}
-                    >
-                        <InlineClozeChoice
-                            varName="answerTriangleCos"
-                            correctAnswer="0.28"
-                            options={["0.28", "0.96", "1", "3.43"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerTriangleCos"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
-
     <StackLayout key="layout-triangle-question-compare" maxWidth="xl">
         <Block id="triangle-question-compare" padding="sm">
             <EditableParagraph id="para-triangle-question-compare" blockId="triangle-question-compare">

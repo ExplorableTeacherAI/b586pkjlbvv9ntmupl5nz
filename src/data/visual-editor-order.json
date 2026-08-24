@@ -14,7 +14,6 @@
     "triangle-formula",
     "triangle-visual",
     "triangle-hook",
-    "triangle-question-coordinate",
     "triangle-question-compare",
     "squares-heading",
     "squares-setup",
@@ -156,18 +155,6 @@
       "columns": [
         [
           "triangle-hook"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-triangle-question-coordinate",
-      "type": "stack",
-      "columns": [
-        [
-          "triangle-question-coordinate"
         ]
       ],
       "props": {
