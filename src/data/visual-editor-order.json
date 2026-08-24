@@ -30,7 +30,6 @@
     "apply-formula",
     "apply-visual",
     "apply-sign",
-    "apply-question-count",
     "applications-heading",
     "applications-sled",
     "applications-sled-photo",
@@ -310,18 +309,6 @@
       "columns": [
         [
           "apply-sign"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-apply-question-count",
-      "type": "stack",
-      "columns": [
-        [
-          "apply-question-count"
         ]
       ],
       "props": {

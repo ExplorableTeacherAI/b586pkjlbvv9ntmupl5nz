@@ -359,47 +359,4 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
             </EditableParagraph>
         </Block>
     </StackLayout>,
-
-    <StackLayout key="layout-apply-question-count" maxWidth="xl">
-        <Block id="apply-question-count" padding="sm">
-            <EditableParagraph id="para-apply-question-count" blockId="apply-question-count">
-                <RevealOnInteraction varName="applyExplored">
-                    If nobody tells you the quadrant, the number of angles between 0° and 360° with
-                    cos θ = 0.28 is{" "}
-                    <InlineFeedback
-                        varName="answerApplyCount"
-                        correctValue="2"
-                        position="terminal"
-                        successMessage="— exactly, the target line cuts the rim in two places, so the sine can be plus or minus 0.96"
-                        failureMessage="— have another go."
-                        hint="Count how many places on the rim your dashed line can land on the same target"
-                        visualizationHint={{
-                            blockId: "apply-visual",
-                            hintKey: "feedback-apply-count-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-circular",
-                                    label: "Hunt down both rings on the target line, above and below the axis",
-                                    position: { x: "57%", y: "36%" },
-                                    dragPath: { type: "arc", startAngle: -55, endAngle: 55, radius: 38 },
-                                    completionVar: "applyAngle",
-                                    completionValue: 307,
-                                    completionTolerance: 8,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { applyTargetCos: 0.6, applyAngle: 20, applyFoundUpper: false, applyFoundLower: false },
-                        }}
-                    >
-                        <InlineClozeChoice
-                            varName="answerApplyCount"
-                            correctAnswer="2"
-                            options={["1", "2", "4", "infinitely many"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerApplyCount"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
 ];
