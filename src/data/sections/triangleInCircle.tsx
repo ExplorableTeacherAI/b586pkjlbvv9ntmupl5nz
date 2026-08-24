@@ -350,49 +350,6 @@ export const triangleInCircleBlocks: ReactElement[] = [
             </EditableParagraph>
         </Block>
     </StackLayout>,
-
-    <StackLayout key="layout-triangle-question-compare" maxWidth="xl">
-        <Block id="triangle-question-compare" padding="sm">
-            <EditableParagraph id="para-triangle-question-compare" blockId="triangle-question-compare">
-                <RevealOnInteraction varName="triangleExplored">
-                    Push the angle up towards 70° and one of the two sides grows while the other
-                    shrinks. The larger of the two there is{" "}
-                    <InlineFeedback
-                        varName="answerTriangleCompare"
-                        correctValue="sin θ"
-                        position="terminal"
-                        successMessage="— right, a steep angle lifts the point high and pulls it close to the y-axis"
-                        failureMessage="— have another look."
-                        hint="The taller the point sits, the longer the upright side and the shorter the flat one"
-                        visualizationHint={{
-                            blockId: "triangle-visual",
-                            hintKey: "feedback-triangle-compare-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-circular",
-                                    label: "Drag the teal point up to 70° and compare the two side labels",
-                                    position: { x: "45%", y: "35%" },
-                                    dragPath: { type: "arc", startAngle: -35, endAngle: -70, radius: 38 },
-                                    completionVar: "unitCircleAngle",
-                                    completionValue: 70,
-                                    completionTolerance: 5,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { unitCircleAngle: 35 },
-                        }}
-                    >
-                        <InlineClozeChoice
-                            varName="answerTriangleCompare"
-                            correctAnswer="sin θ"
-                            options={["cos θ", "sin θ", "they are equal"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerTriangleCompare"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
 ];
 
 export default triangleInCircleBlocks;
