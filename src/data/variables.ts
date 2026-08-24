@@ -267,6 +267,84 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#334155',
     },
 
+    // ========================================
+    // SECTION — One Ratio Gives You the Other
+    // ========================================
+
+    applyAngle: {
+        defaultValue: 20,
+        type: 'number',
+        label: 'Steered angle',
+        description: 'Angle of the dot the student steers around the rim',
+        unit: '\u00b0',
+        min: 0,
+        max: 360,
+        step: 1,
+        color: '#334155',
+    },
+
+    applyTargetCos: {
+        defaultValue: 0.6,
+        type: 'number',
+        label: 'Target cosine',
+        description: 'The cosine value the student is aiming to hit',
+        min: -0.95,
+        max: 0.95,
+        step: 0.01,
+        color: '#F7B23B',
+    },
+
+    applyFoundUpper: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Upper solution found',
+        description: 'Whether the student has landed on the crossing above the x-axis',
+    },
+
+    applyFoundLower: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Lower solution found',
+        description: 'Whether the student has landed on the crossing below the x-axis',
+    },
+
+    applyExplored: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Target hit at least once',
+        description: 'Set to true once the student has hit the target cosine',
+    },
+
+    applyHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Target figure highlight',
+        description: 'Which quantity in the target figure is highlighted on hover',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
+    },
+
+    answerApplySin: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Sine from cosine',
+        description: 'Student answer: sin theta for an acute angle with cos theta of 0.28',
+        placeholder: '???',
+        correctAnswer: ['0.96', '.96'],
+        color: '#AC8BF9',
+    },
+
+    answerApplyCount: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Number of angles with the same cosine',
+        description: 'Student answer: how many angles between 0 and 360 share one cosine value',
+        placeholder: '???',
+        correctAnswer: '2',
+        options: ['1', '2', '4', 'infinitely many'],
+        color: '#F7B23B',
+    },
+
     answerTriangleCompare: {
         defaultValue: '',
         type: 'select',
