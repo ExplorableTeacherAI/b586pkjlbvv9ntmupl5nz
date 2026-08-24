@@ -465,7 +465,7 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-question-notation" maxWidth="xl">
         <Block id="squares-question-notation" padding="sm">
-            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation">/</EditableParagraph>
+            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation"></EditableParagraph>
         </Block>
     </StackLayout>,
 
