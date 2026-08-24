@@ -465,26 +465,7 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-question-notation" maxWidth="xl">
         <Block id="squares-question-notation" padding="sm">
-            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation">
-                <RevealOnInteraction varName="squaresExplored">
-                    Given that sin 45° is about 0.71, the value of sin²45° is about{" "}
-                    <InlineFeedback
-                        varName="answerSquaresNotation"
-                        correctValue="0.5"
-                        position="terminal"
-                        successMessage="— exactly, 0.71 squared is 0.50, which is the area of a square of side 0.71"
-                        failureMessage="— careful."
-                        hint="Find the sine first, then square that answer, rather than squaring the angle"
-                    >
-                        <InlineClozeChoice
-                            varName="answerSquaresNotation"
-                            correctAnswer="0.5"
-                            options={["0", "0.25", "0.5", "1"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerSquaresNotation"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
+            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation">/</EditableParagraph>
         </Block>
     </StackLayout>,
 
