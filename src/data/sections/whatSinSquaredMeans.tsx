@@ -415,46 +415,4 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
             </EditableParagraph>
         </Block>
     </StackLayout>,
-
-    <StackLayout key="layout-notation-question" maxWidth="xl">
-        <Block id="notation-question" padding="sm">
-            <EditableParagraph id="para-notation-question" blockId="notation-question">
-                <RevealOnInteraction varName="notationExplored">
-                    Given that sin 45° is about 0.71, the value of sin²45° is about{" "}
-                    <InlineFeedback
-                        varName="answerNotationSinSquared"
-                        correctValue="0.5"
-                        position="terminal"
-                        successMessage="— exactly, 0.71 squared is 0.50, safely between 0 and 1"
-                        failureMessage="— careful."
-                        hint="Find the sine first, then square that answer, rather than squaring the angle"
-                        visualizationHint={{
-                            blockId: "notation-visual",
-                            hintKey: "feedback-notation-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-horizontal",
-                                    label: "Slide the angle to 45° and drop the sin²θ marker to see where it truly lands",
-                                    position: { x: "50%", y: "88%" },
-                                    dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
-                                    completionVar: "notationAngle",
-                                    completionValue: 45,
-                                    completionTolerance: 2,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { notationAngle: 35 },
-                        }}
-                    >
-                        <InlineClozeChoice
-                            varName="answerNotationSinSquared"
-                            correctAnswer="0.5"
-                            options={["0", "0.25", "0.5", "1"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerNotationSinSquared"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
 ];

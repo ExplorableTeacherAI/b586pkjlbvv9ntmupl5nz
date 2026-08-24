@@ -8,7 +8,6 @@
     "notation-setup",
     "notation-explanation",
     "notation-visual",
-    "notation-question",
     "triangle-heading",
     "triangle-setup",
     "triangle-visual",
@@ -117,18 +116,6 @@
         "gap": "lg",
         "reverse": false,
         "align": "start"
-      }
-    },
-    {
-      "id": "layout-notation-question",
-      "type": "stack",
-      "columns": [
-        [
-          "notation-question"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
       }
     },
     {
