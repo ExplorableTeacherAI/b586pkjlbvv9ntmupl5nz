@@ -6,6 +6,7 @@ import {
     EditableParagraph,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    ImageDisplay,
     InteractionHintSequence,
     VideoDisplay,
 } from "@/components/atoms";
@@ -522,6 +523,18 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
+    <StackLayout key="layout-applications-sled-photo" maxWidth="xl">
+        <Block id="applications-sled-photo" padding="sm">
+            <ImageDisplay
+                id="image-sled-pull-real"
+                src="/images/sled-pull-real.jpg"
+                alt="A student running while pulling a weighted sled behind her on a strap"
+                caption="A real sled pull. The strap runs up from the sled to her shoulders, so part of every step drags the sled forward and part of it lifts. Photo: Chuck Cannon, U.S. Army, public domain."
+                zoomable
+            />
+        </Block>
+    </StackLayout>,
+
     <StackLayout key="layout-applications-sled-figure" maxWidth="xl">
         <Block id="applications-sled-figure" padding="sm" hasVisualization>
             <SledPullFigure />
@@ -535,6 +548,18 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
                 your character's speed is shared out between across and up, yet the brick reaches the
                 ring in the same time whichever way you point.
             </EditableParagraph>
+        </Block>
+    </StackLayout>,
+
+    <StackLayout key="layout-applications-joystick-photo" maxWidth="xl">
+        <Block id="applications-joystick-photo" padding="sm">
+            <ImageDisplay
+                id="image-analog-stick-real"
+                src="/images/analog-stick-real.jpg"
+                alt="Close-up of a game controller analog stick sitting in its round gate"
+                caption="A real analog stick. The round gate stops it going any further out, so whichever way it is pushed it ends up the same distance from the centre. Photo: Evan-Amos, CC0."
+                zoomable
+            />
         </Block>
     </StackLayout>,
 
