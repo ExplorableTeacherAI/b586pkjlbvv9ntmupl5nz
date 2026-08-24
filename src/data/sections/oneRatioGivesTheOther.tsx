@@ -360,47 +360,6 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-apply-question-sine" maxWidth="xl">
-        <Block id="apply-question-sine" padding="sm">
-            <EditableParagraph id="para-apply-question-sine" blockId="apply-question-sine">
-                <RevealOnInteraction varName="applyExplored">
-                    An acute angle has cos θ = 0.28. To two decimal places its sine is{" "}
-                    <InlineFeedback
-                        varName="answerApplySin"
-                        correctValue={["0.96", ".96"]}
-                        position="terminal"
-                        successMessage="— spot on, 1 − 0.0784 leaves 0.9216, and the square root of that is 0.96"
-                        failureMessage="— not yet."
-                        hint="Square the cosine, take it away from 1, then square root what is left"
-                        visualizationHint={{
-                            blockId: "apply-visual",
-                            hintKey: "feedback-apply-sine-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-horizontal",
-                                    label: "Slide the target to 0.28, hit it above the axis, and read the sine",
-                                    position: { x: "50%", y: "88%" },
-                                    dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
-                                    completionVar: "applyTargetCos",
-                                    completionValue: 0.28,
-                                    completionTolerance: 0.02,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { applyTargetCos: 0.6, applyAngle: 20 },
-                        }}
-                    >
-                        <InlineClozeInput
-                            varName="answerApplySin"
-                            correctAnswer={["0.96", ".96"]}
-                            {...clozePropsFromDefinition(getVariableInfo("answerApplySin"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
-
     <StackLayout key="layout-apply-question-count" maxWidth="xl">
         <Block id="apply-question-count" padding="sm">
             <EditableParagraph id="para-apply-question-count" blockId="apply-question-count">

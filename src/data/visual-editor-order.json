@@ -30,7 +30,6 @@
     "apply-formula",
     "apply-visual",
     "apply-sign",
-    "apply-question-sine",
     "apply-question-count",
     "applications-heading",
     "applications-sled",
@@ -311,18 +310,6 @@
       "columns": [
         [
           "apply-sign"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-apply-question-sine",
-      "type": "stack",
-      "columns": [
-        [
-          "apply-question-sine"
         ]
       ],
       "props": {
