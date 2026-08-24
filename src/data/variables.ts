@@ -197,6 +197,76 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#AC8BF9',
     },
 
+    // ========================================
+    // SECTION — Turning Past 90 degrees
+    // ========================================
+
+    quadrantAngle: {
+        defaultValue: 40,
+        type: 'number',
+        label: 'Angle around the whole circle',
+        description: 'Angle theta of the walking dot, measured anticlockwise from the positive x-axis',
+        unit: '\u00b0',
+        min: 0,
+        max: 360,
+        step: 1,
+        color: '#334155',
+    },
+
+    quadrantTrailMax: {
+        defaultValue: 40,
+        type: 'number',
+        label: 'Furthest angle reached',
+        description: 'The furthest the dot has walked, used to draw the trail it leaves behind',
+        min: 0,
+        max: 360,
+        step: 1,
+    },
+
+    quadrantPlaying: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Walk playing',
+        description: 'Whether the dot is walking round the circle on its own',
+    },
+
+    quadrantExplored: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Walked past 90 degrees',
+        description: 'Set to true once the dot has been walked well past the first quadrant',
+    },
+
+    quadrantHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Quadrant figure highlight',
+        description: 'Which quantity in the walking-dot figure is highlighted on hover',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    answerQuadrantCosSign: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Sign of cosine at 210 degrees',
+        description: 'Student answer: whether cos theta is positive or negative at 210 degrees',
+        placeholder: '???',
+        correctAnswer: 'negative',
+        options: ['positive', 'negative', 'zero'],
+        color: '#8E90F5',
+    },
+
+    answerQuadrantIdentity: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Identity total at 210 degrees',
+        description: 'Student answer: value of sin squared plus cos squared at 210 degrees',
+        placeholder: '???',
+        correctAnswer: ['1', '1.0', 'one'],
+        color: '#334155',
+    },
+
     answerTriangleCompare: {
         defaultValue: '',
         type: 'select',
