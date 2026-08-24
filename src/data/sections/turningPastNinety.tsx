@@ -283,17 +283,10 @@ function WalkingDotDrawing() {
 
             {/* Readouts */}
             <g opacity={dimOthers} style={ease}>
-                <text x={PAD} y={334} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={42} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
-                <text
-                    x={VIEW_WIDTH - PAD}
-                    y={334}
-                    fill={INK}
-                    fontSize="13"
-                    textAnchor="end"
-                    style={{ fontVariantNumeric: "tabular-nums" }}
-                >
+                <text x={PAD} y={334} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`sin²θ + cos²θ = ${fmtRatio(sinValue * sinValue + cosValue * cosValue)}`}
                 </text>
             </g>
