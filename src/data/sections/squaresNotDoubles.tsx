@@ -408,7 +408,7 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-setup" maxWidth="xl">
         <Block id="squares-setup" padding="sm">
-            <EditableParagraph id="para-squares-setup" blockId="squares-setup">Pythagoras says the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared. At θ = <InlineScrubbleNumber varName={"unitCircleAngle"} defaultValue={35} min={15} max={80} step={1} color={"#334155"} id={"scrubble-1787556032731-x4ekg"} /> a real square sits on each shorter side, so drag them both across into the empty square of side 1 and see whether they</EditableParagraph>
+            <EditableParagraph id="para-squares-setup" blockId="squares-setup">Pythagoras says the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared. At θ = <InlineScrubbleNumber varName={"unitCircleAngle"} defaultValue={35} min={15} max={80} step={1} color={"#334155"} id={"scrubble-1787556032731-x4ekg"} /> a real square sits on each shorter side, so drag them both across into the empty square of side 1 and see whether they fit.</EditableParagraph>
         </Block>
     </StackLayout>,
 
