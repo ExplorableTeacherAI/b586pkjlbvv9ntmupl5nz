@@ -345,8 +345,8 @@ export const triangleInCircleBlocks: ReactElement[] = [
     <StackLayout key="layout-triangle-hook" maxWidth="xl">
         <Block id="triangle-hook" padding="sm">
             <EditableParagraph id="para-triangle-hook" blockId="triangle-hook">
-                Which raises a question worth chasing. If both sides hang off the same slanted side of
-                length 1, can they really change independently of each other?
+                Which raises a question worth chasing. If both sides hang off the same slanted side
+                of length 1, can they really change independently?
             </EditableParagraph>
         </Block>
     </StackLayout>,

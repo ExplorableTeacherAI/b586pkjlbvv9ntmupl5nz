@@ -143,10 +143,23 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
     },
 
     // ========================================
-    // SECTION — Squares, Not Doubles
+    // ========================================
+    // SECTION — What sin squared theta Really Means
     // ========================================
 
-    squaresGuessSinSquared: {
+    notationAngle: {
+        defaultValue: 35,
+        type: 'number',
+        label: 'Angle for the notation line',
+        description: 'Angle theta used on the number line where the two markers are dropped',
+        unit: '\u00b0',
+        min: 15,
+        max: 80,
+        step: 1,
+        color: '#334155',
+    },
+
+    notationGuessSinSquared: {
         defaultValue: 0,
         type: 'number',
         label: 'Guess for sin squared theta',
@@ -157,7 +170,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#AC8BF9',
     },
 
-    squaresGuessSinOfSquared: {
+    notationGuessSinOfSquared: {
         defaultValue: 0,
         type: 'number',
         label: 'Guess for sine of theta squared',
@@ -168,37 +181,37 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#94A3B8',
     },
 
-    squaresSinSquaredPlaced: {
+    notationSinSquaredPlaced: {
         defaultValue: false,
         type: 'boolean',
         label: 'sin squared marker placed',
         description: 'Whether the sin squared theta marker has been dropped on the line',
     },
 
-    squaresSinOfSquaredPlaced: {
+    notationSinOfSquaredPlaced: {
         defaultValue: false,
         type: 'boolean',
         label: 'sine of theta squared marker placed',
         description: 'Whether the sine of theta squared marker has been dropped on the line',
     },
 
-    squaresExplored: {
+    notationExplored: {
         defaultValue: false,
         type: 'boolean',
         label: 'Both markers placed',
         description: 'Set to true once both markers have been dropped onto the number line',
     },
 
-    squaresHighlight: {
+    notationHighlight: {
         defaultValue: '',
         type: 'linkedHighlight',
-        label: 'Squares figure highlight',
+        label: 'Notation figure highlight',
         description: 'Which marker on the number line is highlighted on hover',
-        color: '#8E90F5',
-        bgColor: 'rgba(142, 144, 245, 0.20)',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
     },
 
-    answerSquaresNotation: {
+    answerNotationSinSquared: {
         defaultValue: '',
         type: 'select',
         label: 'Value of sin squared 45',
@@ -207,6 +220,40 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         correctAnswer: '0.5',
         options: ['0', '0.25', '0.5', '1'],
         color: '#AC8BF9',
+    },
+
+    // ========================================
+    // SECTION — Squares That Add to One
+    // ========================================
+
+    squaresCosPlaced: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Cosine square packed',
+        description: 'Whether the square built on the flat side has been packed into the unit square',
+    },
+
+    squaresSinPlaced: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Sine square packed',
+        description: 'Whether the square built on the upright side has been packed into the unit square',
+    },
+
+    squaresExplored: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Both squares packed',
+        description: 'Set to true once both squares have been packed into the unit square',
+    },
+
+    squaresHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Squares figure highlight',
+        description: 'Which square in the packing figure is highlighted on hover',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
     },
 
     answerSquaresIdentity: {
@@ -219,7 +266,6 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#AC8BF9',
     },
 
-    // ========================================
     // SECTION — Turning Past 90 degrees
     // ========================================
 

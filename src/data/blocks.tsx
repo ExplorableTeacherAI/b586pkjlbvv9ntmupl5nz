@@ -7,7 +7,8 @@ import { useVariableStore, initializeVariableColors } from "@/stores";
 import { getDefaultValues, variableDefinitions } from "./variables";
 import { unitCircleOrientBlocks } from "./sections/unitCircleOrient";
 import { triangleInCircleBlocks } from "./sections/triangleInCircle";
-import { squaresNotDoublesBlocks } from "./sections/squaresNotDoubles";
+import { whatSinSquaredMeansBlocks } from "./sections/whatSinSquaredMeans";
+import { squaresThatAddToOneBlocks } from "./sections/squaresThatAddToOne";
 import { turningPastNinetyBlocks } from "./sections/turningPastNinety";
 import { oneRatioGivesTheOtherBlocks } from "./sections/oneRatioGivesTheOther";
 import { whereThisShowsUpBlocks } from "./sections/whereThisShowsUp";
@@ -93,8 +94,9 @@ initializeVariableColors(variableDefinitions);
 
 export const blocks: ReactElement[] = [
     ...unitCircleOrientBlocks,
+    ...whatSinSquaredMeansBlocks,
     ...triangleInCircleBlocks,
-    ...squaresNotDoublesBlocks,
+    ...squaresThatAddToOneBlocks,
     ...turningPastNinetyBlocks,
     ...oneRatioGivesTheOtherBlocks,
     ...whereThisShowsUpBlocks,

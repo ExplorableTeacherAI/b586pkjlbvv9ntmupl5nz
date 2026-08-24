@@ -382,7 +382,7 @@ export const turningPastNinetyBlocks: ReactElement[] = [
     <StackLayout key="layout-quadrants-range" maxWidth="xl">
         <Block id="quadrants-range" padding="sm">
             <EditableParagraph id="para-quadrants-range" blockId="quadrants-range">
-                There is a bonus hiding in that. At θ ={" "}
+                At θ ={" "}
                 <InlineScrubbleNumber
                     varName="quadrantAngle"
                     {...numberPropsFromDefinition(getVariableInfo("quadrantAngle"))}

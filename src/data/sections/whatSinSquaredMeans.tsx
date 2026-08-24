@@ -5,19 +5,17 @@ import {
     EditableH2,
     EditableParagraph,
     InlineClozeChoice,
-    InlineClozeInput,
     InlineFeedback,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InteractionHintSequence,
     RevealOnInteraction,
 } from "@/components/atoms";
-import { Figure, FigureSlider, FormulaBlock } from "@/components/molecules";
+import { Figure, FigureSlider } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
 import { clamp, useSpring } from "@/lib/motion";
 import {
     choicePropsFromDefinition,
-    clozePropsFromDefinition,
     getVariableInfo,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
@@ -172,12 +170,12 @@ function GuessMarker({
 
 function GuessTheSquareDrawing() {
     const setVar = useSetVar();
-    const angle = useVar<number>("unitCircleAngle", 35);
-    const guessSquare = useVar<number>("squaresGuessSinSquared", 0);
-    const guessImpostor = useVar<number>("squaresGuessSinOfSquared", 0);
-    const squarePlaced = useVar<boolean>("squaresSinSquaredPlaced", false);
-    const impostorPlaced = useVar<boolean>("squaresSinOfSquaredPlaced", false);
-    const highlight = useVar<string>("squaresHighlight", "");
+    const angle = useVar<number>("notationAngle", 35);
+    const guessSquare = useVar<number>("notationGuessSinSquared", 0);
+    const guessImpostor = useVar<number>("notationGuessSinOfSquared", 0);
+    const squarePlaced = useVar<boolean>("notationSinSquaredPlaced", false);
+    const impostorPlaced = useVar<boolean>("notationSinOfSquaredPlaced", false);
+    const highlight = useVar<string>("notationHighlight", "");
     const svgRef = useRef<SVGSVGElement>(null);
     const previousAngle = useRef(angle);
 
@@ -185,13 +183,13 @@ function GuessTheSquareDrawing() {
     useEffect(() => {
         if (previousAngle.current !== angle) {
             previousAngle.current = angle;
-            setVar("squaresSinSquaredPlaced", false);
-            setVar("squaresSinOfSquaredPlaced", false);
+            setVar("notationSinSquaredPlaced", false);
+            setVar("notationSinOfSquaredPlaced", false);
         }
     }, [angle, setVar]);
 
     useEffect(() => {
-        if (squarePlaced && impostorPlaced) setVar("squaresExplored", true);
+        if (squarePlaced && impostorPlaced) setVar("notationExplored", true);
     }, [squarePlaced, impostorPlaced, setVar]);
 
     const sinValue = Math.sin(toRadians(angle));
@@ -204,12 +202,12 @@ function GuessTheSquareDrawing() {
     const ease = { transition: "opacity 150ms ease-out" };
 
     const handleDrop = (which: "square" | "impostor") => (x: number, y: number) => {
-        const placedVar = which === "square" ? "squaresSinSquaredPlaced" : "squaresSinOfSquaredPlaced";
+        const placedVar = which === "square" ? "notationSinSquaredPlaced" : "notationSinOfSquaredPlaced";
         if (y > DROP_THRESHOLD) {
             setVar(placedVar, false);
             return;
         }
-        setVar(which === "square" ? "squaresGuessSinSquared" : "squaresGuessSinOfSquared", xToValue(x));
+        setVar(which === "square" ? "notationGuessSinSquared" : "notationGuessSinOfSquared", xToValue(x));
         setVar(placedVar, true);
     };
 
@@ -305,7 +303,7 @@ function GuessTheSquareDrawing() {
                 highlighted={isActive("sinSquared")}
                 svgRef={svgRef}
                 onDrop={handleDrop("square")}
-                onHover={(entering) => setVar("squaresHighlight", entering ? "sinSquared" : "")}
+                onHover={(entering) => setVar("notationHighlight", entering ? "sinSquared" : "")}
             />
             <GuessMarker
                 label="sin(θ²)"
@@ -317,7 +315,7 @@ function GuessTheSquareDrawing() {
                 highlighted={isActive("sinOfSquared")}
                 svgRef={svgRef}
                 onDrop={handleDrop("impostor")}
-                onHover={(entering) => setVar("squaresHighlight", entering ? "sinOfSquared" : "")}
+                onHover={(entering) => setVar("notationHighlight", entering ? "sinOfSquared" : "")}
             />
 
             <g opacity={dimOthers} style={ease}>
@@ -338,19 +336,19 @@ function GuessTheSquareFigure() {
         <Figure
             id="guess-the-square-line"
             onReset={() => {
-                setVar("squaresSinSquaredPlaced", false);
-                setVar("squaresSinOfSquaredPlaced", false);
-                setVar("unitCircleAngle", 35);
-                setVar("squaresHighlight", "");
+                setVar("notationSinSquaredPlaced", false);
+                setVar("notationSinOfSquaredPlaced", false);
+                setVar("notationAngle", 35);
+                setVar("notationHighlight", "");
             }}
             caption="Drag each marker up onto the line and let go. A hollow ring shows where the value truly sits, so you can see how close the guess was. Change the angle and the markers come back for another go."
         >
             <GuessTheSquareDrawing />
             <div className="px-6 pb-5">
                 <FigureSlider
-                    varName="unitCircleAngle"
+                    varName="notationAngle"
                     label="Angle θ"
-                    {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
+                    {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
                     formatValue={(v) => `${Math.round(v)}°`}
                 />
             </div>
@@ -371,143 +369,88 @@ function GuessTheSquareFigure() {
 
 // ── Blocks ───────────────────────────────────────────────────────────────────
 
-export const squaresNotDoublesBlocks: ReactElement[] = [
-    <StackLayout key="layout-squares-heading" maxWidth="xl">
-        <Block id="squares-heading" padding="md">
-            <EditableH2 id="h2-squares-heading" blockId="squares-heading">
-                Squares, Not Doubles
+export const whatSinSquaredMeansBlocks: ReactElement[] = [
+    <StackLayout key="layout-notation-heading" maxWidth="xl">
+        <Block id="notation-heading" padding="md">
+            <EditableH2 id="h2-notation-heading" blockId="notation-heading">
+                What sin²θ Really Means
             </EditableH2>
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-squares-setup" maxWidth="xl">
-        <Block id="squares-setup" padding="sm">
-            <EditableParagraph id="para-squares-setup" blockId="squares-setup">
-                Pythagoras says the two shorter sides of a right triangle, each squared, add up to the
-                hypotenuse squared, which on the unit circle reads sin²θ + cos²θ = 1. Squaring is
-                where this usually goes wrong, though. At θ ={" "}
+    <StackLayout key="layout-notation-setup" maxWidth="xl">
+        <Block id="notation-setup" padding="sm">
+            <EditableParagraph id="para-notation-setup" blockId="notation-setup">
+                Before anything else, one piece of shorthand that trips people up. At θ ={" "}
                 <InlineScrubbleNumber
-                    varName="unitCircleAngle"
-                    {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
+                    varName="notationAngle"
+                    {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
                     formatValue={(v) => `${Math.round(v)}°`}
                 />
-                , drop the two markers where you think each one lands.
+                , two innocent-looking expressions sit on the number line below. Drop each marker
+                where you think its value lands.
             </EditableParagraph>
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-squares-visual" maxWidth="xl">
-        <Block id="squares-visual" padding="sm" hasVisualization>
+    <StackLayout key="layout-notation-visual" maxWidth="xl">
+        <Block id="notation-visual" padding="sm" hasVisualization>
             <GuessTheSquareFigure />
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-squares-formula" maxWidth="xl">
-        <Block id="squares-formula" padding="lg">
-            <FormulaBlock
-                latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
-                colorMap={{ sin: SIN_HUE, cos: "#8E90F5" }}
-            />
-        </Block>
-    </StackLayout>,
-
-    <StackLayout key="layout-squares-notation" maxWidth="xl">
-        <Block id="squares-notation" padding="sm">
-            <EditableParagraph id="para-squares-notation" blockId="squares-notation">
-                Notice what{" "}
+    <StackLayout key="layout-notation-explanation" maxWidth="xl">
+        <Block id="notation-explanation" padding="sm">
+            <EditableParagraph id="para-notation-explanation" blockId="notation-explanation">
                 <InlineLinkedHighlight
-                    varName="squaresHighlight"
+                    varName="notationHighlight"
                     highlightId="sinSquared"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("squaresHighlight"))}
-                    color={SIN_HUE}
-                    bgColor="rgba(172, 139, 249, 0.20)"
+                    {...linkedHighlightPropsFromDefinition(getVariableInfo("notationHighlight"))}
                 >
                     sin²θ
                 </InlineLinkedHighlight>
-                {" "}really means: the sine first, then squared, so it never escapes the stretch from 0
-                to 1. Squaring the angle instead sends the answer anywhere on the line, negatives
-                included. At 30° the two readings are 0.25 and 0, quite a gap for one small slip.
+                {" "}means the sine first, then squared, so it never escapes the stretch from 0 to 1.
+                Squaring the angle instead sends the answer anywhere on the line, negatives included.
+                Two brackets are all that separate them.
             </EditableParagraph>
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-squares-question-notation" maxWidth="xl">
-        <Block id="squares-question-notation" padding="sm">
-            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation">
-                <RevealOnInteraction varName="squaresExplored">
+    <StackLayout key="layout-notation-question" maxWidth="xl">
+        <Block id="notation-question" padding="sm">
+            <EditableParagraph id="para-notation-question" blockId="notation-question">
+                <RevealOnInteraction varName="notationExplored">
                     Given that sin 45° is about 0.71, the value of sin²45° is about{" "}
                     <InlineFeedback
-                        varName="answerSquaresNotation"
+                        varName="answerNotationSinSquared"
                         correctValue="0.5"
                         position="terminal"
                         successMessage="— exactly, 0.71 squared is 0.50, safely between 0 and 1"
                         failureMessage="— careful."
                         hint="Find the sine first, then square that answer, rather than squaring the angle"
                         visualizationHint={{
-                            blockId: "squares-visual",
-                            hintKey: "feedback-squares-notation-hint",
+                            blockId: "notation-visual",
+                            hintKey: "feedback-notation-hint",
                             steps: [
                                 {
                                     gesture: "drag-horizontal",
                                     label: "Slide the angle to 45° and drop the sin²θ marker to see where it truly lands",
                                     position: { x: "50%", y: "88%" },
                                     dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
-                                    completionVar: "unitCircleAngle",
+                                    completionVar: "notationAngle",
                                     completionValue: 45,
                                     completionTolerance: 2,
                                 },
                             ],
                             label: "Discover it yourself",
-                            resetVars: { unitCircleAngle: 35 },
+                            resetVars: { notationAngle: 35 },
                         }}
                     >
                         <InlineClozeChoice
-                            varName="answerSquaresNotation"
+                            varName="answerNotationSinSquared"
                             correctAnswer="0.5"
                             options={["0", "0.25", "0.5", "1"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerSquaresNotation"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
-
-    <StackLayout key="layout-squares-question-identity" maxWidth="xl">
-        <Block id="squares-question-identity" padding="sm">
-            <EditableParagraph id="para-squares-question-identity" blockId="squares-question-identity">
-                <RevealOnInteraction varName="squaresExplored">
-                    An acute angle has cos θ = 0.6, so cos²θ = 0.36. For the identity to hold, sin²θ
-                    must be{" "}
-                    <InlineFeedback
-                        varName="answerSquaresIdentity"
-                        correctValue={["0.64", ".64", "16/25"]}
-                        position="terminal"
-                        successMessage="— yes, the two squares always total 1, so 1 − 0.36 leaves 0.64"
-                        failureMessage="— not yet."
-                        hint="The two squared values always add up to exactly 1"
-                        visualizationHint={{
-                            blockId: "squares-visual",
-                            hintKey: "feedback-squares-identity-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-horizontal",
-                                    label: "Slide the angle to 53°, where cos θ is 0.6, then drop the sin²θ marker",
-                                    position: { x: "50%", y: "88%" },
-                                    dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
-                                    completionVar: "unitCircleAngle",
-                                    completionValue: 53,
-                                    completionTolerance: 3,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { unitCircleAngle: 35 },
-                        }}
-                    >
-                        <InlineClozeInput
-                            varName="answerSquaresIdentity"
-                            correctAnswer={["0.64", ".64", "16/25"]}
-                            {...clozePropsFromDefinition(getVariableInfo("answerSquaresIdentity"))}
+                            {...choicePropsFromDefinition(getVariableInfo("answerNotationSinSquared"))}
                         />
                     </InlineFeedback>.
                 </RevealOnInteraction>
