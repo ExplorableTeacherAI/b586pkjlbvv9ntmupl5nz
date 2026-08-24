@@ -7,6 +7,7 @@ import {
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InteractionHintSequence,
+    VideoDisplay,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
@@ -546,6 +547,18 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
     <StackLayout key="layout-applications-joke" maxWidth="xl">
         <Block id="applications-joke" padding="sm">
             <NotationJokePanel />
+        </Block>
+    </StackLayout>,
+
+    <StackLayout key="layout-applications-video" maxWidth="xl">
+        <Block id="applications-video" padding="sm">
+            <VideoDisplay
+                id="video-unit-circle-intro"
+                src="https://www.youtube.com/watch?v=1m9p9iubMLU"
+                alt="Introduction to the unit circle"
+                caption="Sal Khan walks through the same idea from scratch, in case you would like to hear it explained out loud."
+                aspectRatio="16/9"
+            />
         </Block>
     </StackLayout>,
 ];
