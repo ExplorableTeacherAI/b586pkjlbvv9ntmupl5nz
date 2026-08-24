@@ -393,47 +393,4 @@ export const turningPastNinetyBlocks: ReactElement[] = [
             </EditableParagraph>
         </Block>
     </StackLayout>,
-
-    <StackLayout key="layout-quadrants-question-sign" maxWidth="xl">
-        <Block id="quadrants-question-sign" padding="sm">
-            <EditableParagraph id="para-quadrants-question-sign" blockId="quadrants-question-sign">
-                <RevealOnInteraction varName="quadrantExplored">
-                    An angle of 210° puts the dot in the third quadrant, below and to the left of the
-                    centre. Its cosine is therefore{" "}
-                    <InlineFeedback
-                        varName="answerQuadrantCosSign"
-                        correctValue="negative"
-                        position="terminal"
-                        successMessage="— correct, the dot is left of the centre, so its across coordinate carries a minus sign"
-                        failureMessage="— have another look."
-                        hint="Cosine is the across coordinate, and left of the centre counts as negative"
-                        visualizationHint={{
-                            blockId: "quadrants-visual",
-                            hintKey: "feedback-quadrant-sign-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-circular",
-                                    label: "Walk the dot round to 210° and watch the cosine bar",
-                                    position: { x: "34%", y: "36%" },
-                                    dragPath: { type: "arc", startAngle: -40, endAngle: 150, radius: 40 },
-                                    completionVar: "quadrantAngle",
-                                    completionValue: 210,
-                                    completionTolerance: 12,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { quadrantAngle: 40, quadrantPlaying: false },
-                        }}
-                    >
-                        <InlineClozeChoice
-                            varName="answerQuadrantCosSign"
-                            correctAnswer="negative"
-                            options={["positive", "negative", "zero"]}
-                            {...choicePropsFromDefinition(getVariableInfo("answerQuadrantCosSign"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
 ];

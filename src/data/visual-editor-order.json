@@ -25,7 +25,6 @@
     "quadrants-visual",
     "quadrants-signs",
     "quadrants-range",
-    "quadrants-question-sign",
     "apply-heading",
     "apply-setup",
     "apply-formula",
@@ -252,18 +251,6 @@
       "columns": [
         [
           "quadrants-range"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-quadrants-question-sign",
-      "type": "stack",
-      "columns": [
-        [
-          "quadrants-question-sign"
         ]
       ],
       "props": {
