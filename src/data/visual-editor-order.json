@@ -32,7 +32,6 @@
     "apply-sign",
     "applications-heading",
     "applications-sled",
-    "applications-sled-photo",
     "applications-sled-figure",
     "applications-sled-video",
     "applications-joystick",
@@ -333,18 +332,6 @@
       "columns": [
         [
           "applications-sled"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-applications-sled-photo",
-      "type": "stack",
-      "columns": [
-        [
-          "applications-sled-photo"
         ]
       ],
       "props": {

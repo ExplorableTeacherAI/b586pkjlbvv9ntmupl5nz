@@ -523,18 +523,6 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-applications-sled-photo" maxWidth="xl">
-        <Block id="applications-sled-photo" padding="sm">
-            <ImageDisplay
-                id="image-sled-pull-real"
-                src="/images/sled-pull-real.jpg"
-                alt="A student running while pulling a weighted sled behind her on a strap"
-                caption="A real sled pull. The strap runs up from the sled to her shoulders, so part of every step drags the sled forward and part of it lifts. Photo: Chuck Cannon, U.S. Army, public domain."
-                zoomable
-            />
-        </Block>
-    </StackLayout>,
-
     <StackLayout key="layout-applications-sled-figure" maxWidth="xl">
         <Block id="applications-sled-figure" padding="sm" hasVisualization>
             <SledPullFigure />
