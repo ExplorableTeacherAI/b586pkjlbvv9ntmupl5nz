@@ -4,6 +4,7 @@
     "orient-title",
     "orient-hook",
     "orient-promise",
+    "applications-joke",
     "triangle-heading",
     "triangle-setup",
     "triangle-visual",
@@ -14,7 +15,6 @@
     "triangle-question-compare",
     "squares-heading",
     "squares-setup",
-    "block-1787555587803",
     "squares-visual",
     "squares-formula",
     "squares-notation",
@@ -36,7 +36,13 @@
     "conclusion-insight",
     "conclusion-forward",
     "apply-question-sine",
-    "apply-question-count"
+    "apply-question-count",
+    "applications-heading",
+    "applications-sled",
+    "applications-sled-figure",
+    "applications-joystick",
+    "applications-joystick-figure",
+    "applications-video"
   ],
   "rows": [
     {
@@ -69,6 +75,18 @@
       "columns": [
         [
           "orient-promise"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-joke",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-joke"
         ]
       ],
       "props": {
@@ -183,18 +201,6 @@
       "columns": [
         [
           "squares-setup"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-block-1787555587803",
-      "type": "stack",
-      "columns": [
-        [
-          "block-1787555587803"
         ]
       ],
       "props": {
@@ -459,6 +465,78 @@
       "columns": [
         [
           "apply-question-count"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-heading",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-heading"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-sled",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-sled"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-sled-figure",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-sled-figure"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-joystick",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-joystick"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-joystick-figure",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-joystick-figure"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-applications-video",
+      "type": "stack",
+      "columns": [
+        [
+          "applications-video"
         ]
       ],
       "props": {
