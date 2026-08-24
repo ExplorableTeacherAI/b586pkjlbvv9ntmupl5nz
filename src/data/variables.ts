@@ -142,6 +142,61 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#8E90F5',
     },
 
+    // ========================================
+    // SECTION — Squares, Not Doubles
+    // ========================================
+
+    squaresCosPlaced: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Cosine square packed',
+        description: 'Whether the square built on the flat side has been packed into the unit square',
+    },
+
+    squaresSinPlaced: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Sine square packed',
+        description: 'Whether the square built on the upright side has been packed into the unit square',
+    },
+
+    squaresExplored: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Both squares packed',
+        description: 'Set to true once both squares have been packed into the unit square',
+    },
+
+    squaresHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Squares figure highlight',
+        description: 'Which square in the packing figure is highlighted on hover',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    answerSquaresNotation: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Value of sin squared 45',
+        description: 'Student answer: sin squared of 45 degrees',
+        placeholder: '???',
+        correctAnswer: '0.5',
+        options: ['0', '0.25', '0.5', '1'],
+        color: '#AC8BF9',
+    },
+
+    answerSquaresIdentity: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Sine squared from cosine',
+        description: 'Student answer: sin squared theta when cos theta is 0.6',
+        placeholder: '???',
+        correctAnswer: ['0.64', '.64', '16/25'],
+        color: '#AC8BF9',
+    },
+
     answerTriangleCompare: {
         defaultValue: '',
         type: 'select',
