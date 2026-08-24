@@ -82,8 +82,77 @@ export interface VariableDefinition {
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
     // ========================================
-    // ADD YOUR VARIABLES HERE
+    // SECTION — A Triangle Hidden in a Circle
     // ========================================
+
+    unitCircleAngle: {
+        defaultValue: 35,
+        type: 'number',
+        label: 'Angle on the unit circle',
+        description: 'Angle theta of the point on the unit circle, measured from the positive x-axis',
+        unit: '\u00b0',
+        min: 15,
+        max: 80,
+        step: 1,
+        color: '#334155',
+    },
+
+    unitCircleHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Unit circle highlight',
+        description: 'Which part of the unit circle figure is highlighted on hover',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    unitCircleCosHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Unit circle cosine highlight',
+        description: 'Highlight trigger coloured for the horizontal (cosine) side',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    unitCircleSinHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Unit circle sine highlight',
+        description: 'Highlight trigger coloured for the vertical (sine) side',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
+    },
+
+    triangleExplored: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'Unit circle triangle explored',
+        description: 'Set to true the first time the student drags the point around the rim',
+    },
+
+    answerTriangleCos: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Cosine from coordinates',
+        description: 'Student answer: which coordinate is cos theta',
+        placeholder: '???',
+        correctAnswer: '0.28',
+        options: ['0.28', '0.96', '1', '3.43'],
+        color: '#8E90F5',
+    },
+
+    answerTriangleCompare: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Larger ratio at 70 degrees',
+        description: 'Student answer: which of cos or sin is larger at 70 degrees',
+        placeholder: '???',
+        correctAnswer: 'sin \u03b8',
+        options: ['cos \u03b8', 'sin \u03b8', 'they are equal'],
+        color: '#AC8BF9',
+    },
+
 
     // Uncomment and modify these examples for your lesson:
 
