@@ -16,9 +16,9 @@
     "triangle-hook",
     "squares-heading",
     "squares-setup",
+    "squares-visual",
     "squares-formula",
     "squares-reflection",
-    "squares-visual",
     "squares-question-identity",
     "quadrants-heading",
     "quadrants-setup",
@@ -174,22 +174,17 @@
     },
     {
       "id": "layout-squares-setup",
-      "type": "split",
+      "type": "stack",
       "columns": [
         [
           "squares-setup",
+          "squares-visual",
           "squares-formula",
           "squares-reflection"
-        ],
-        [
-          "squares-visual"
         ]
       ],
       "props": {
-        "ratio": "1:1",
-        "gap": "lg",
-        "reverse": false,
-        "align": "start"
+        "maxWidth": "xl"
       }
     },
     {
