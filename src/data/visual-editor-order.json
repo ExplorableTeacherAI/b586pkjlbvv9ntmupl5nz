@@ -174,26 +174,20 @@
     },
     {
       "id": "layout-squares-setup",
-      "type": "stack",
+      "type": "split",
       "columns": [
         [
           "squares-setup"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-squares-visual",
-      "type": "stack",
-      "columns": [
+        ],
         [
           "squares-visual"
         ]
       ],
       "props": {
-        "maxWidth": "xl"
+        "ratio": "1:1",
+        "gap": "lg",
+        "reverse": false,
+        "align": "start"
       }
     },
     {
