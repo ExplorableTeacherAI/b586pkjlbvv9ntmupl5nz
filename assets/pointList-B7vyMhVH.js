@@ -1,0 +1,1 @@
+import{j as t}from"./index-CNhiB-wl.js";function a({children:e}){return t.jsxs("span",{className:"relative block pl-5 mt-1.5 first:mt-0",children:[t.jsx("span",{className:"absolute left-0 text-foreground/40","aria-hidden":"true",children:"•"}),e]})}const r="space-y-1.5";export{r as POINT_LIST_CLASS,a as Point,a as default};

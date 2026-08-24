@@ -1,1 +1,0 @@
-import{j as s}from"./index-C-ZeJ1Q9.js";function e({children:t}){return s.jsxs("span",{className:"block pl-5 -indent-5 mt-1.5 first:mt-0",children:[s.jsx("span",{className:"text-foreground/40",children:"•"})," ",t]})}const r="space-y-1.5";export{r as POINT_LIST_CLASS,e as Point,e as default};
