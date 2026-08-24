@@ -17,8 +17,8 @@
     "squares-heading",
     "squares-setup",
     "squares-formula",
-    "squares-visual",
     "squares-reflection",
+    "squares-visual",
     "squares-question-identity",
     "quadrants-heading",
     "quadrants-setup",
@@ -178,7 +178,8 @@
       "columns": [
         [
           "squares-setup",
-          "squares-formula"
+          "squares-formula",
+          "squares-reflection"
         ],
         [
           "squares-visual"
@@ -189,18 +190,6 @@
         "gap": "lg",
         "reverse": false,
         "align": "start"
-      }
-    },
-    {
-      "id": "layout-squares-reflection",
-      "type": "stack",
-      "columns": [
-        [
-          "squares-reflection"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
       }
     },
     {
