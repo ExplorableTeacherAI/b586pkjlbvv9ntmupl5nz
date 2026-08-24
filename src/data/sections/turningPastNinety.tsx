@@ -436,46 +436,4 @@ export const turningPastNinetyBlocks: ReactElement[] = [
             </EditableParagraph>
         </Block>
     </StackLayout>,
-
-    <StackLayout key="layout-quadrants-question-identity" maxWidth="xl">
-        <Block id="quadrants-question-identity" padding="sm">
-            <EditableParagraph id="para-quadrants-question-identity" blockId="quadrants-question-identity">
-                <RevealOnInteraction varName="quadrantExplored">
-                    At that same 210°, both coordinates are negative. The value of sin²θ + cos²θ there
-                    is{" "}
-                    <InlineFeedback
-                        varName="answerQuadrantIdentity"
-                        correctValue={["1", "1.0", "one"]}
-                        position="terminal"
-                        successMessage="— yes, two negatives squared turn positive, so the total is 1 in every quadrant"
-                        failureMessage="— not quite."
-                        hint="A negative number squared comes out positive, so the signs never survive the squaring"
-                        visualizationHint={{
-                            blockId: "quadrants-visual",
-                            hintKey: "feedback-quadrant-identity-hint",
-                            steps: [
-                                {
-                                    gesture: "drag-circular",
-                                    label: "Walk the dot to 210° and read the total on the right",
-                                    position: { x: "34%", y: "36%" },
-                                    dragPath: { type: "arc", startAngle: -40, endAngle: 150, radius: 40 },
-                                    completionVar: "quadrantAngle",
-                                    completionValue: 210,
-                                    completionTolerance: 12,
-                                },
-                            ],
-                            label: "Discover it yourself",
-                            resetVars: { quadrantAngle: 40, quadrantPlaying: false },
-                        }}
-                    >
-                        <InlineClozeInput
-                            varName="answerQuadrantIdentity"
-                            correctAnswer={["1", "1.0", "one"]}
-                            {...clozePropsFromDefinition(getVariableInfo("answerQuadrantIdentity"))}
-                        />
-                    </InlineFeedback>.
-                </RevealOnInteraction>
-            </EditableParagraph>
-        </Block>
-    </StackLayout>,
 ];
