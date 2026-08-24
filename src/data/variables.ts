@@ -146,32 +146,54 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
     // SECTION — Squares, Not Doubles
     // ========================================
 
-    squaresCosPlaced: {
-        defaultValue: false,
-        type: 'boolean',
-        label: 'Cosine square packed',
-        description: 'Whether the square built on the flat side has been packed into the unit square',
+    squaresGuessSinSquared: {
+        defaultValue: 0,
+        type: 'number',
+        label: 'Guess for sin squared theta',
+        description: 'Where the student dropped the sin squared theta marker on the number line',
+        min: -1,
+        max: 1,
+        step: 0.01,
+        color: '#AC8BF9',
     },
 
-    squaresSinPlaced: {
+    squaresGuessSinOfSquared: {
+        defaultValue: 0,
+        type: 'number',
+        label: 'Guess for sine of theta squared',
+        description: 'Where the student dropped the sine of theta squared marker on the number line',
+        min: -1,
+        max: 1,
+        step: 0.01,
+        color: '#94A3B8',
+    },
+
+    squaresSinSquaredPlaced: {
         defaultValue: false,
         type: 'boolean',
-        label: 'Sine square packed',
-        description: 'Whether the square built on the upright side has been packed into the unit square',
+        label: 'sin squared marker placed',
+        description: 'Whether the sin squared theta marker has been dropped on the line',
+    },
+
+    squaresSinOfSquaredPlaced: {
+        defaultValue: false,
+        type: 'boolean',
+        label: 'sine of theta squared marker placed',
+        description: 'Whether the sine of theta squared marker has been dropped on the line',
     },
 
     squaresExplored: {
         defaultValue: false,
         type: 'boolean',
-        label: 'Both squares packed',
-        description: 'Set to true once both squares have been packed into the unit square',
+        label: 'Both markers placed',
+        description: 'Set to true once both markers have been dropped onto the number line',
     },
 
     squaresHighlight: {
         defaultValue: '',
         type: 'linkedHighlight',
         label: 'Squares figure highlight',
-        description: 'Which square in the packing figure is highlighted on hover',
+        description: 'Which marker on the number line is highlighted on hover',
         color: '#8E90F5',
         bgColor: 'rgba(142, 144, 245, 0.20)',
     },

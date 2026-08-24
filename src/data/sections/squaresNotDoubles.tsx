@@ -14,7 +14,7 @@ import {
 } from "@/components/atoms";
 import { Figure, FigureSlider, FormulaBlock } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
-import { lerp, useSpring } from "@/lib/motion";
+import { clamp, useSpring } from "@/lib/motion";
 import {
     choicePropsFromDefinition,
     clozePropsFromDefinition,
@@ -25,90 +25,77 @@ import {
 
 // ── View constants ───────────────────────────────────────────────────────────
 
-const VIEW_WIDTH = 540;
-const VIEW_HEIGHT = 400;
+const VIEW_WIDTH = 560;
+const VIEW_HEIGHT = 340;
 const PAD = 24;
-const UNIT = 92; // pixels for one unit of length
-const CORNER = { x: 110, y: 215 }; // right-angle corner of the triangle
-const UNIT_SQUARE = { x: 370, y: 123, size: UNIT }; // the empty square of side 1
+const LINE_Y = 150;
+const LINE_LEFT = 60;
+const LINE_RIGHT = 500;
+const LINE_CENTRE = (LINE_LEFT + LINE_RIGHT) / 2;
+const PIXELS_PER_UNIT = (LINE_RIGHT - LINE_LEFT) / 2;
+
+const CHIP_WIDTH = 100;
+const CHIP_HEIGHT = 30;
+const PLACED_Y = 222; // centre of a chip resting under the line
+const TRAY_Y = 285; // centre of a chip waiting in the tray
+const DROP_THRESHOLD = 244; // release above this line and the marker is placed
 
 const INK = "#334155";
 const INK_STRUCTURE = "#64748B";
 const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5";
 const SIN_HUE = "#AC8BF9";
+const IMPOSTOR_HUE = "#94A3B8";
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
-const fmtArea = (value: number) => value.toFixed(2);
+const fmtRatio = (value: number) => value.toFixed(2);
+const valueToX = (value: number) => LINE_CENTRE + PIXELS_PER_UNIT * value;
+const xToValue = (x: number) => clamp((x - LINE_CENTRE) / PIXELS_PER_UNIT, -1, 1);
 
-type Rect = { x: number; y: number; w: number; h: number };
+// ── One draggable marker ─────────────────────────────────────────────────────
 
-const labelSpot = (rect: Rect) =>
-    rect.w >= 46 && rect.h >= 20
-        ? { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 + 4, anchor: "middle" as const }
-        : {
-              x: Math.min(rect.x + rect.w + 8, VIEW_WIDTH - PAD - 40),
-              y: rect.y + rect.h / 2 + 4,
-              anchor: "start" as const,
-          };
-
-// ── One packable square ──────────────────────────────────────────────────────
-
-interface PackableSquareProps {
-    home: Rect;
-    dock: Rect;
-    placed: boolean;
-    hue: string;
-    patternId: string;
+interface GuessMarkerProps {
     label: string;
+    hue: string;
+    placed: boolean;
+    guess: number;
+    trayX: number;
     dimmed: number;
     highlighted: boolean;
     svgRef: React.RefObject<SVGSVGElement>;
-    onDrop: (insideDock: boolean) => void;
+    onDrop: (x: number, y: number) => void;
     onHover: (entering: boolean) => void;
 }
 
-function PackableSquare({
-    home,
-    dock,
-    placed,
-    hue,
-    patternId,
+function GuessMarker({
     label,
+    hue,
+    placed,
+    guess,
+    trayX,
     dimmed,
     highlighted,
     svgRef,
     onDrop,
     onHover,
-}: PackableSquareProps) {
-    const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
-    const startRef = useRef<{ clientX: number; clientY: number } | null>(null);
+}: GuessMarkerProps) {
+    const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
 
-    const t = useSpring(placed ? 1 : 0, { stiffness: 150, damping: 19 });
-    const springX = useSpring(drag ? drag.x : 0, { stiffness: 240, damping: 26 });
-    const springY = useSpring(drag ? drag.y : 0, { stiffness: 240, damping: 26 });
+    const targetX = placed ? clamp(valueToX(guess), PAD + CHIP_WIDTH / 2, VIEW_WIDTH - PAD - CHIP_WIDTH / 2) : trayX;
+    const targetY = placed ? PLACED_Y : TRAY_Y;
+    const springX = useSpring(dragPos ? dragPos.x : targetX, { stiffness: 220, damping: 24 });
+    const springY = useSpring(dragPos ? dragPos.y : targetY, { stiffness: 220, damping: 24 });
 
-    const offsetX = drag ? drag.x : springX;
-    const offsetY = drag ? drag.y : springY;
-
-    const rect: Rect = {
-        x: lerp(home.x, dock.x, t) + offsetX,
-        y: lerp(home.y, dock.y, t) + offsetY,
-        w: lerp(home.w, dock.w, t),
-        h: lerp(home.h, dock.h, t),
-    };
+    const centre = dragPos ?? { x: springX, y: springY };
 
     const toViewBox = (clientX: number, clientY: number) => {
         const svg = svgRef.current;
-        if (!svg) return { x: 0, y: 0 };
+        if (!svg) return { x: centre.x, y: centre.y };
         const bounds = svg.getBoundingClientRect();
         return {
             x: ((clientX - bounds.left) / bounds.width) * VIEW_WIDTH,
             y: ((clientY - bounds.top) / bounds.height) * VIEW_HEIGHT,
         };
     };
-
-    const spot = labelSpot(rect);
 
     return (
         <g
@@ -117,66 +104,62 @@ function PackableSquare({
             onPointerEnter={() => onHover(true)}
             onPointerLeave={() => onHover(false)}
         >
+            {placed && !dragPos && (
+                <line
+                    x1={centre.x}
+                    y1={centre.y - CHIP_HEIGHT / 2}
+                    x2={valueToX(guess)}
+                    y2={LINE_Y}
+                    stroke={hue}
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                />
+            )}
             {highlighted && (
                 <rect
-                    x={rect.x - 3}
-                    y={rect.y - 3}
-                    width={Math.max(rect.w + 6, 0)}
-                    height={Math.max(rect.h + 6, 0)}
+                    x={centre.x - CHIP_WIDTH / 2 - 3}
+                    y={centre.y - CHIP_HEIGHT / 2 - 3}
+                    width={CHIP_WIDTH + 6}
+                    height={CHIP_HEIGHT + 6}
+                    rx={9}
                     fill="none"
                     stroke={hue}
-                    strokeWidth={9}
+                    strokeWidth="9"
                     opacity={0.28}
-                    rx={4}
                 />
             )}
             <rect
-                x={rect.x}
-                y={rect.y}
-                width={Math.max(rect.w, 0)}
-                height={Math.max(rect.h, 0)}
-                fill={`url(#${patternId})`}
+                x={centre.x - CHIP_WIDTH / 2}
+                y={centre.y - CHIP_HEIGHT / 2}
+                width={CHIP_WIDTH}
+                height={CHIP_HEIGHT}
+                rx={6}
+                fill={hue}
+                fillOpacity={0.18}
                 stroke={hue}
                 strokeWidth={highlighted ? 3.5 : 2}
-                strokeLinejoin="round"
-                rx={2}
-                style={{ cursor: drag ? "grabbing" : "grab", touchAction: "none", transition: "stroke-width 150ms ease-out" }}
+                style={{ cursor: dragPos ? "grabbing" : "grab", touchAction: "none", transition: "stroke-width 150ms ease-out" }}
                 onPointerDown={(event) => {
                     event.currentTarget.setPointerCapture(event.pointerId);
-                    startRef.current = { clientX: event.clientX, clientY: event.clientY };
-                    setDrag({ x: 0, y: 0 });
+                    setDragPos(toViewBox(event.clientX, event.clientY));
                 }}
                 onPointerMove={(event) => {
-                    if (!startRef.current || !svgRef.current) return;
-                    const bounds = svgRef.current.getBoundingClientRect();
-                    const scale = VIEW_WIDTH / bounds.width;
-                    setDrag({
-                        x: (event.clientX - startRef.current.clientX) * scale,
-                        y: (event.clientY - startRef.current.clientY) * scale,
-                    });
+                    if (!dragPos) return;
+                    setDragPos(toViewBox(event.clientX, event.clientY));
                 }}
                 onPointerUp={(event) => {
                     const point = toViewBox(event.clientX, event.clientY);
-                    const inside =
-                        point.x > UNIT_SQUARE.x - 30 &&
-                        point.x < UNIT_SQUARE.x + UNIT_SQUARE.size + 30 &&
-                        point.y > UNIT_SQUARE.y - 30 &&
-                        point.y < UNIT_SQUARE.y + UNIT_SQUARE.size + 30;
-                    startRef.current = null;
-                    setDrag(null);
-                    onDrop(inside);
+                    setDragPos(null);
+                    onDrop(point.x, point.y);
                 }}
-                onPointerCancel={() => {
-                    startRef.current = null;
-                    setDrag(null);
-                }}
+                onPointerCancel={() => setDragPos(null)}
             />
             <text
-                x={spot.x}
-                y={spot.y}
+                x={centre.x}
+                y={centre.y + 5}
                 fill={hue}
-                fontSize="12"
-                textAnchor={spot.anchor}
+                fontSize="14"
+                textAnchor="middle"
                 style={{ pointerEvents: "none" }}
             >
                 {label}
@@ -187,46 +170,52 @@ function PackableSquare({
 
 // ── The bespoke drawing ──────────────────────────────────────────────────────
 
-function BrickSquaresDrawing() {
+function GuessTheSquareDrawing() {
     const setVar = useSetVar();
     const angle = useVar<number>("unitCircleAngle", 35);
-    const cosPlaced = useVar<boolean>("squaresCosPlaced", false);
-    const sinPlaced = useVar<boolean>("squaresSinPlaced", false);
+    const guessSquare = useVar<number>("squaresGuessSinSquared", 0);
+    const guessImpostor = useVar<number>("squaresGuessSinOfSquared", 0);
+    const squarePlaced = useVar<boolean>("squaresSinSquaredPlaced", false);
+    const impostorPlaced = useVar<boolean>("squaresSinOfSquaredPlaced", false);
     const highlight = useVar<string>("squaresHighlight", "");
     const svgRef = useRef<SVGSVGElement>(null);
+    const previousAngle = useRef(angle);
+
+    // A new angle is a fresh prediction.
+    useEffect(() => {
+        if (previousAngle.current !== angle) {
+            previousAngle.current = angle;
+            setVar("squaresSinSquaredPlaced", false);
+            setVar("squaresSinOfSquaredPlaced", false);
+        }
+    }, [angle, setVar]);
 
     useEffect(() => {
-        if (cosPlaced && sinPlaced) setVar("squaresExplored", true);
-    }, [cosPlaced, sinPlaced, setVar]);
+        if (squarePlaced && impostorPlaced) setVar("squaresExplored", true);
+    }, [squarePlaced, impostorPlaced, setVar]);
 
-    const radians = toRadians(angle);
-    const cosValue = Math.cos(radians);
-    const sinValue = Math.sin(radians);
-    const cosLength = UNIT * cosValue;
-    const sinLength = UNIT * sinValue;
-
-    const apex = { x: CORNER.x + cosLength, y: CORNER.y - sinLength };
-
-    // Home positions: a real square built outward on each shorter side.
-    const cosHome: Rect = { x: CORNER.x, y: CORNER.y, w: cosLength, h: cosLength };
-    const sinHome: Rect = { x: apex.x, y: apex.y, w: sinLength, h: sinLength };
-
-    // Docked positions: the same area, reshaped into a full-width strip.
-    const unitBottom = UNIT_SQUARE.y + UNIT_SQUARE.size;
-    const cosStripHeight = UNIT * cosValue * cosValue;
-    const sinStripHeight = UNIT * sinValue * sinValue;
-    const cosDock: Rect = { x: UNIT_SQUARE.x, y: unitBottom - cosStripHeight, w: UNIT, h: cosStripHeight };
-    const sinDock: Rect = {
-        x: UNIT_SQUARE.x,
-        y: unitBottom - (cosPlaced ? cosStripHeight : 0) - sinStripHeight,
-        w: UNIT,
-        h: sinStripHeight,
-    };
+    const sinValue = Math.sin(toRadians(angle));
+    const trueSquare = sinValue * sinValue;
+    const trueImpostor = Math.sin(toRadians(angle * angle));
 
     const isActive = (id: string) => highlight === id;
     const dim = (id: string) => (highlight && highlight !== id ? 0.35 : 1);
     const dimOthers = highlight ? 0.35 : 1;
     const ease = { transition: "opacity 150ms ease-out" };
+
+    const handleDrop = (which: "square" | "impostor") => (x: number, y: number) => {
+        const placedVar = which === "square" ? "squaresSinSquaredPlaced" : "squaresSinOfSquaredPlaced";
+        if (y > DROP_THRESHOLD) {
+            setVar(placedVar, false);
+            return;
+        }
+        setVar(which === "square" ? "squaresGuessSinSquared" : "squaresGuessSinOfSquared", xToValue(x));
+        setVar(placedVar, true);
+    };
+
+    // Keep the two truth labels apart when the values sit close together.
+    const truthLabelY = Math.abs(valueToX(trueSquare) - valueToX(trueImpostor)) < 110 ? 194 : 176;
+    const clampLabel = (x: number) => clamp(x, PAD + 58, VIEW_WIDTH - PAD - 58);
 
     return (
         <svg
@@ -234,137 +223,129 @@ function BrickSquaresDrawing() {
             viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
             className="block w-full"
             role="img"
-            aria-label="Squares built on the two shorter sides of a right triangle, packed into a square of side one"
+            aria-label="A number line from minus one to one with two markers to drop onto it"
         >
-            <defs>
-                <pattern id="cos-studs" patternUnits="userSpaceOnUse" width="12" height="12">
-                    <rect width="12" height="12" fill={COS_HUE} fillOpacity="0.16" />
-                    <circle cx="6" cy="6" r="2.4" fill={COS_HUE} fillOpacity="0.45" />
-                </pattern>
-                <pattern id="sin-studs" patternUnits="userSpaceOnUse" width="12" height="12">
-                    <rect width="12" height="12" fill={SIN_HUE} fillOpacity="0.16" />
-                    <circle cx="6" cy="6" r="2.4" fill={SIN_HUE} fillOpacity="0.45" />
-                </pattern>
-            </defs>
-
-            {/* The triangle the squares are built on */}
+            {/* The line itself */}
             <g opacity={dimOthers} style={ease}>
-                <polygon
-                    points={`${CORNER.x},${CORNER.y} ${apex.x},${CORNER.y} ${apex.x},${apex.y}`}
-                    fill="#F8FAFC"
-                    stroke={INK_STRUCTURE}
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                />
-                <line
-                    x1={CORNER.x}
-                    y1={CORNER.y}
-                    x2={apex.x}
-                    y2={apex.y}
-                    stroke={INK_STRUCTURE}
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                />
-                <text
-                    x={CORNER.x + cosLength / 2 - 12 * sinValue}
-                    y={CORNER.y - sinLength / 2 - 10 * cosValue}
-                    fill={INK_STRUCTURE}
-                    fontSize="12"
-                    textAnchor="middle"
-                >
-                    1
-                </text>
+                <line x1={LINE_LEFT} y1={LINE_Y} x2={LINE_RIGHT} y2={LINE_Y} stroke={INK_STRUCTURE} strokeWidth="2" strokeLinecap="round" />
+                {[-1, -0.5, 0, 0.5, 1].map((tick) => (
+                    <line
+                        key={tick}
+                        x1={valueToX(tick)}
+                        y1={LINE_Y - 6}
+                        x2={valueToX(tick)}
+                        y2={LINE_Y + 6}
+                        stroke={INK_QUIET}
+                        strokeWidth="1.5"
+                    />
+                ))}
+                <text x={valueToX(-1)} y={LINE_Y - 14} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">-1</text>
+                <text x={valueToX(0)} y={LINE_Y - 14} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">0</text>
+                <text x={valueToX(1)} y={LINE_Y - 14} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">1</text>
             </g>
 
-            {/* The empty square of side 1 */}
+            {/* Where sin θ itself sits */}
             <g opacity={dimOthers} style={ease}>
-                <rect
-                    x={UNIT_SQUARE.x}
-                    y={UNIT_SQUARE.y}
-                    width={UNIT_SQUARE.size}
-                    height={UNIT_SQUARE.size}
-                    fill="#FFFFFF"
-                    stroke={INK_QUIET}
-                    strokeWidth="2"
-                    strokeDasharray="6 5"
-                    rx={2}
-                />
-                <text x={UNIT_SQUARE.x + UNIT_SQUARE.size / 2} y={UNIT_SQUARE.y - 10} fill={INK_STRUCTURE} fontSize="12" textAnchor="middle">
-                    1
-                </text>
-                <text x={UNIT_SQUARE.x - 10} y={UNIT_SQUARE.y + UNIT_SQUARE.size / 2 + 4} fill={INK_STRUCTURE} fontSize="12" textAnchor="end">
-                    1
-                </text>
-            </g>
-
-            <PackableSquare
-                home={cosHome}
-                dock={cosDock}
-                placed={cosPlaced}
-                hue={COS_HUE}
-                patternId="cos-studs"
-                label="cos²θ"
-                dimmed={dim("cos")}
-                highlighted={isActive("cos")}
-                svgRef={svgRef}
-                onDrop={(inside) => setVar("squaresCosPlaced", inside)}
-                onHover={(entering) => setVar("squaresHighlight", entering ? "cos" : "")}
-            />
-
-            <PackableSquare
-                home={sinHome}
-                dock={sinDock}
-                placed={sinPlaced}
-                hue={SIN_HUE}
-                patternId="sin-studs"
-                label="sin²θ"
-                dimmed={dim("sin")}
-                highlighted={isActive("sin")}
-                svgRef={svgRef}
-                onDrop={(inside) => setVar("squaresSinPlaced", inside)}
-                onHover={(entering) => setVar("squaresHighlight", entering ? "sin" : "")}
-            />
-
-            {/* Readouts, below the drawing */}
-            <g opacity={dimOthers} style={ease}>
-                <text x={PAD} y={372} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {`θ = ${Math.round(angle)}°`}
-                </text>
+                <line x1={valueToX(sinValue)} y1={LINE_Y - 26} x2={valueToX(sinValue)} y2={LINE_Y + 8} stroke={SIN_HUE} strokeWidth="2.5" strokeLinecap="round" />
                 <text
-                    x={VIEW_WIDTH - PAD}
-                    y={372}
-                    fill={INK}
+                    x={clampLabel(valueToX(sinValue))}
+                    y={LINE_Y - 36}
+                    fill={SIN_HUE}
                     fontSize="13"
-                    textAnchor="end"
+                    textAnchor="middle"
                     style={{ fontVariantNumeric: "tabular-nums" }}
                 >
-                    cos²θ + sin²θ = <tspan fill={COS_HUE}>{fmtArea(cosValue * cosValue)}</tspan> +{" "}
-                    <tspan fill={SIN_HUE}>{fmtArea(sinValue * sinValue)}</tspan> ={" "}
-                    {fmtArea(cosValue * cosValue + sinValue * sinValue)}
+                    {`sin θ = ${fmtRatio(sinValue)}`}
+                </text>
+            </g>
+
+            {/* The truth, revealed once a marker has been committed */}
+            <g opacity={dim("sinSquared")} style={ease}>
+                {squarePlaced && (
+                    <>
+                        <circle cx={valueToX(trueSquare)} cy={LINE_Y} r="9" fill="none" stroke={SIN_HUE} strokeWidth="2.5" />
+                        <text
+                            x={clampLabel(valueToX(trueSquare))}
+                            y={176}
+                            fill={SIN_HUE}
+                            fontSize="12"
+                            textAnchor="middle"
+                            style={{ fontVariantNumeric: "tabular-nums" }}
+                        >
+                            {`sin²θ = ${fmtRatio(trueSquare)}`}
+                        </text>
+                    </>
+                )}
+            </g>
+            <g opacity={dim("sinOfSquared")} style={ease}>
+                {impostorPlaced && (
+                    <>
+                        <circle cx={valueToX(trueImpostor)} cy={LINE_Y} r="9" fill="none" stroke={IMPOSTOR_HUE} strokeWidth="2.5" />
+                        <text
+                            x={clampLabel(valueToX(trueImpostor))}
+                            y={truthLabelY}
+                            fill={IMPOSTOR_HUE}
+                            fontSize="12"
+                            textAnchor="middle"
+                            style={{ fontVariantNumeric: "tabular-nums" }}
+                        >
+                            {`sin(θ²) = ${fmtRatio(trueImpostor)}`}
+                        </text>
+                    </>
+                )}
+            </g>
+
+            <GuessMarker
+                label="sin²θ"
+                hue={SIN_HUE}
+                placed={squarePlaced}
+                guess={guessSquare}
+                trayX={170}
+                dimmed={dim("sinSquared")}
+                highlighted={isActive("sinSquared")}
+                svgRef={svgRef}
+                onDrop={handleDrop("square")}
+                onHover={(entering) => setVar("squaresHighlight", entering ? "sinSquared" : "")}
+            />
+            <GuessMarker
+                label="sin(θ²)"
+                hue={IMPOSTOR_HUE}
+                placed={impostorPlaced}
+                guess={guessImpostor}
+                trayX={390}
+                dimmed={dim("sinOfSquared")}
+                highlighted={isActive("sinOfSquared")}
+                svgRef={svgRef}
+                onDrop={handleDrop("impostor")}
+                onHover={(entering) => setVar("squaresHighlight", entering ? "sinOfSquared" : "")}
+            />
+
+            <g opacity={dimOthers} style={ease}>
+                <text x={PAD} y={42} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {`θ = ${Math.round(angle)}°`}
+                </text>
+                <text x={VIEW_WIDTH - PAD} y={42} fill={INK_STRUCTURE} fontSize="12" textAnchor="end">
+                    drop each marker where you think it lands
                 </text>
             </g>
         </svg>
     );
 }
 
-function BrickSquaresFigure() {
+function GuessTheSquareFigure() {
     const setVar = useSetVar();
-    const cosPlaced = useVar<boolean>("squaresCosPlaced", false);
-    const sinPlaced = useVar<boolean>("squaresSinPlaced", false);
-    const step = (cosPlaced ? 1 : 0) + (sinPlaced ? 1 : 0);
-
     return (
         <Figure
-            id="brick-squares-packing"
+            id="guess-the-square-line"
             onReset={() => {
-                setVar("squaresCosPlaced", false);
-                setVar("squaresSinPlaced", false);
+                setVar("squaresSinSquaredPlaced", false);
+                setVar("squaresSinOfSquaredPlaced", false);
                 setVar("unitCircleAngle", 35);
                 setVar("squaresHighlight", "");
             }}
-            caption="Drag each brick-tiled square across into the dashed square of side 1. Whatever the angle, the two of them fill it exactly, with nothing spare and nothing missing."
+            caption="Drag each marker up onto the line and let go. A hollow ring shows where the value truly sits, so you can see how close the guess was. Change the angle and the markers come back for another go."
         >
-            <BrickSquaresDrawing />
+            <GuessTheSquareDrawing />
             <div className="px-6 pb-5">
                 <FigureSlider
                     varName="unitCircleAngle"
@@ -374,20 +355,13 @@ function BrickSquaresFigure() {
                 />
             </div>
             <InteractionHintSequence
-                hintKey="brick-squares-pack"
-                currentStep={Math.min(step, 1)}
+                hintKey="guess-the-square-drop"
                 steps={[
                     {
                         gesture: "drag",
-                        label: "Drag the indigo square into the dashed square",
-                        position: { x: "33%", y: "58%" },
-                        dragPath: { type: "line", startOffset: { x: -20, y: 10 }, endOffset: { x: 30, y: -14 } },
-                    },
-                    {
-                        gesture: "drag",
-                        label: "Now bring the purple square in too",
-                        position: { x: "45%", y: "40%" },
-                        dragPath: { type: "line", startOffset: { x: -20, y: 6 }, endOffset: { x: 30, y: -10 } },
+                        label: "Drag the sin²θ marker up onto the line",
+                        position: { x: "30%", y: "72%" },
+                        dragPath: { type: "line", startOffset: { x: 0, y: 18 }, endOffset: { x: 20, y: -30 } },
                     },
                 ]}
             />
@@ -408,19 +382,23 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
 
     <StackLayout key="layout-squares-setup" maxWidth="xl">
         <Block id="squares-setup" padding="sm">
-            <EditableParagraph id="para-squares-setup" blockId="squares-setup">Pythagoras says the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared. At θ = <InlineScrubbleNumber varName={"unitCircleAngle"} defaultValue={35} min={15} max={80} step={1} color={"#334155"} id={"scrubble-1787556032731-x4ekg"} /> a real square sits on each shorter side, so drag them both across into the empty square of side 1 and see whether they fit.</EditableParagraph>
-        </Block>
-    </StackLayout>,
-
-    <StackLayout key="layout-block-1787555587803" maxWidth="xl">
-        <Block id="block-1787555587803" padding="sm">
-            <EditableParagraph id="para-block-1787555587803" blockId="block-1787555587803">/</EditableParagraph>
+            <EditableParagraph id="para-squares-setup" blockId="squares-setup">
+                Pythagoras says the two shorter sides of a right triangle, each squared, add up to the
+                hypotenuse squared, which on the unit circle reads sin²θ + cos²θ = 1. Squaring is
+                where this usually goes wrong, though. At θ ={" "}
+                <InlineScrubbleNumber
+                    varName="unitCircleAngle"
+                    {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
+                    formatValue={(v) => `${Math.round(v)}°`}
+                />
+                , drop the two markers where you think each one lands.
+            </EditableParagraph>
         </Block>
     </StackLayout>,
 
     <StackLayout key="layout-squares-visual" maxWidth="xl">
         <Block id="squares-visual" padding="sm" hasVisualization>
-            <BrickSquaresFigure />
+            <GuessTheSquareFigure />
         </Block>
     </StackLayout>,
 
@@ -428,7 +406,7 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
         <Block id="squares-formula" padding="lg">
             <FormulaBlock
                 latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
-                colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                colorMap={{ sin: SIN_HUE, cos: "#8E90F5" }}
             />
         </Block>
     </StackLayout>,
@@ -439,23 +417,59 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
                 Notice what{" "}
                 <InlineLinkedHighlight
                     varName="squaresHighlight"
-                    highlightId="sin"
+                    highlightId="sinSquared"
                     {...linkedHighlightPropsFromDefinition(getVariableInfo("squaresHighlight"))}
                     color={SIN_HUE}
                     bgColor="rgba(172, 139, 249, 0.20)"
                 >
                     sin²θ
                 </InlineLinkedHighlight>
-                {" "}really is: the area of a square whose side is sin θ. Take the sine first, then
-                square the answer, which is nothing like the sine of θ². At 30° those two readings
-                give 0.25 and 0, quite a gap for one small slip.
+                {" "}really means: the sine first, then squared, so it never escapes the stretch from 0
+                to 1. Squaring the angle instead sends the answer anywhere on the line, negatives
+                included. At 30° the two readings are 0.25 and 0, quite a gap for one small slip.
             </EditableParagraph>
         </Block>
     </StackLayout>,
 
     <StackLayout key="layout-squares-question-notation" maxWidth="xl">
         <Block id="squares-question-notation" padding="sm">
-            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation"></EditableParagraph>
+            <EditableParagraph id="para-squares-question-notation" blockId="squares-question-notation">
+                <RevealOnInteraction varName="squaresExplored">
+                    Given that sin 45° is about 0.71, the value of sin²45° is about{" "}
+                    <InlineFeedback
+                        varName="answerSquaresNotation"
+                        correctValue="0.5"
+                        position="terminal"
+                        successMessage="— exactly, 0.71 squared is 0.50, safely between 0 and 1"
+                        failureMessage="— careful."
+                        hint="Find the sine first, then square that answer, rather than squaring the angle"
+                        visualizationHint={{
+                            blockId: "squares-visual",
+                            hintKey: "feedback-squares-notation-hint",
+                            steps: [
+                                {
+                                    gesture: "drag-horizontal",
+                                    label: "Slide the angle to 45° and drop the sin²θ marker to see where it truly lands",
+                                    position: { x: "50%", y: "88%" },
+                                    dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
+                                    completionVar: "unitCircleAngle",
+                                    completionValue: 45,
+                                    completionTolerance: 2,
+                                },
+                            ],
+                            label: "Discover it yourself",
+                            resetVars: { unitCircleAngle: 35 },
+                        }}
+                    >
+                        <InlineClozeChoice
+                            varName="answerSquaresNotation"
+                            correctAnswer="0.5"
+                            options={["0", "0.25", "0.5", "1"]}
+                            {...choicePropsFromDefinition(getVariableInfo("answerSquaresNotation"))}
+                        />
+                    </InlineFeedback>.
+                </RevealOnInteraction>
+            </EditableParagraph>
         </Block>
     </StackLayout>,
 
@@ -463,22 +477,22 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
         <Block id="squares-question-identity" padding="sm">
             <EditableParagraph id="para-squares-question-identity" blockId="squares-question-identity">
                 <RevealOnInteraction varName="squaresExplored">
-                    An acute angle has cos θ = 0.6, so the square on its flat side has area 0.36. The
-                    square on the upright side must then have area{" "}
+                    An acute angle has cos θ = 0.6, so cos²θ = 0.36. For the identity to hold, sin²θ
+                    must be{" "}
                     <InlineFeedback
                         varName="answerSquaresIdentity"
                         correctValue={["0.64", ".64", "16/25"]}
                         position="terminal"
-                        successMessage="— yes, the two areas always fill the unit square, so 1 − 0.36 leaves 0.64"
+                        successMessage="— yes, the two squares always total 1, so 1 − 0.36 leaves 0.64"
                         failureMessage="— not yet."
-                        hint="Between them the two squares fill an area of exactly 1"
+                        hint="The two squared values always add up to exactly 1"
                         visualizationHint={{
                             blockId: "squares-visual",
                             hintKey: "feedback-squares-identity-hint",
                             steps: [
                                 {
                                     gesture: "drag-horizontal",
-                                    label: "Slide the angle to 53°, where the flat side reads 0.6, and read the two areas",
+                                    label: "Slide the angle to 53°, where cos θ is 0.6, then drop the sin²θ marker",
                                     position: { x: "50%", y: "88%" },
                                     dragPath: { type: "line", startOffset: { x: -35, y: 0 }, endOffset: { x: 35, y: 0 } },
                                     completionVar: "unitCircleAngle",
@@ -487,7 +501,7 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
                                 },
                             ],
                             label: "Discover it yourself",
-                            resetVars: { unitCircleAngle: 35, squaresCosPlaced: true, squaresSinPlaced: true },
+                            resetVars: { unitCircleAngle: 35 },
                         }}
                     >
                         <InlineClozeInput
