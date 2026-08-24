@@ -14,6 +14,7 @@
     "triangle-question-compare",
     "squares-heading",
     "squares-setup",
+    "block-1787555587803",
     "squares-visual",
     "squares-formula",
     "squares-notation",
@@ -33,7 +34,9 @@
     "apply-sign",
     "conclusion-heading",
     "conclusion-insight",
-    "conclusion-forward"
+    "conclusion-forward",
+    "apply-question-sine",
+    "apply-question-count"
   ],
   "rows": [
     {
@@ -180,6 +183,18 @@
       "columns": [
         [
           "squares-setup"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "layout-block-1787555587803",
+      "type": "stack",
+      "columns": [
+        [
+          "block-1787555587803"
         ]
       ],
       "props": {
@@ -420,6 +435,30 @@
       "columns": [
         [
           "conclusion-forward"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-apply-question-sine",
+      "type": "stack",
+      "columns": [
+        [
+          "apply-question-sine"
+        ]
+      ],
+      "props": {
+        "maxWidth": "xl"
+      }
+    },
+    {
+      "id": "editor-full-apply-question-count",
+      "type": "stack",
+      "columns": [
+        [
+          "apply-question-count"
         ]
       ],
       "props": {

@@ -422,6 +422,12 @@ export const squaresNotDoublesBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
+    <StackLayout key="layout-block-1787555587803" maxWidth="xl">
+        <Block id="block-1787555587803" padding="sm">
+            <EditableParagraph id="para-block-1787555587803" blockId="block-1787555587803">/</EditableParagraph>
+        </Block>
+    </StackLayout>,
+
     <StackLayout key="layout-squares-visual" maxWidth="xl">
         <Block id="squares-visual" padding="sm" hasVisualization>
             <BrickSquaresFigure />
