@@ -6,8 +6,8 @@
     "orient-promise",
     "notation-heading",
     "notation-setup",
-    "notation-visual",
     "notation-explanation",
+    "notation-visual",
     "notation-question",
     "triangle-heading",
     "triangle-setup",
@@ -105,7 +105,8 @@
       "type": "split",
       "columns": [
         [
-          "notation-setup"
+          "notation-setup",
+          "notation-explanation"
         ],
         [
           "notation-visual"
@@ -116,18 +117,6 @@
         "gap": "lg",
         "reverse": false,
         "align": "start"
-      }
-    },
-    {
-      "id": "layout-notation-explanation",
-      "type": "stack",
-      "columns": [
-        [
-          "notation-explanation"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
       }
     },
     {
