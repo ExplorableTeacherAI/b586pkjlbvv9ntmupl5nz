@@ -132,26 +132,20 @@
     },
     {
       "id": "layout-triangle-setup",
-      "type": "stack",
+      "type": "split",
       "columns": [
         [
           "triangle-setup"
-        ]
-      ],
-      "props": {
-        "maxWidth": "xl"
-      }
-    },
-    {
-      "id": "layout-triangle-visual",
-      "type": "stack",
-      "columns": [
+        ],
         [
           "triangle-visual"
         ]
       ],
       "props": {
-        "maxWidth": "xl"
+        "ratio": "1:1",
+        "gap": "lg",
+        "reverse": false,
+        "align": "start"
       }
     },
     {
