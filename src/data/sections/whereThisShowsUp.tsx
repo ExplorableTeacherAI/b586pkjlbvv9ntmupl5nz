@@ -539,18 +539,6 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
         </Block>
     </StackLayout>,
 
-    <StackLayout key="layout-applications-joystick-photo" maxWidth="xl">
-        <Block id="applications-joystick-photo" padding="sm">
-            <ImageDisplay
-                id="image-analog-stick-real"
-                src="/images/analog-stick-real.jpg"
-                alt="Close-up of a game controller analog stick sitting in its round gate"
-                caption="A real analog stick. The round gate stops it going any further out, so whichever way it is pushed it ends up the same distance from the centre. Photo: Evan-Amos, CC0."
-                zoomable
-            />
-        </Block>
-    </StackLayout>,
-
     <StackLayout key="layout-applications-joystick-figure" maxWidth="xl">
         <Block id="applications-joystick-figure" padding="sm" hasVisualization>
             <JoystickFigure />
