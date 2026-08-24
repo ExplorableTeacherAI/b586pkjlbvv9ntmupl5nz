@@ -10,6 +10,7 @@ import { triangleInCircleBlocks } from "./sections/triangleInCircle";
 import { squaresNotDoublesBlocks } from "./sections/squaresNotDoubles";
 import { turningPastNinetyBlocks } from "./sections/turningPastNinety";
 import { oneRatioGivesTheOtherBlocks } from "./sections/oneRatioGivesTheOther";
+import { whereThisShowsUpBlocks } from "./sections/whereThisShowsUp";
 import { unitCircleConclusionBlocks } from "./sections/unitCircleConclusion";
 useVariableStore.getState().initialize(getDefaultValues());
 initializeVariableColors(variableDefinitions);
@@ -96,5 +97,6 @@ export const blocks: ReactElement[] = [
     ...squaresNotDoublesBlocks,
     ...turningPastNinetyBlocks,
     ...oneRatioGivesTheOtherBlocks,
+    ...whereThisShowsUpBlocks,
     ...unitCircleConclusionBlocks,
 ];

@@ -345,6 +345,43 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         color: '#F7B23B',
     },
 
+    // ========================================
+    // SECTION — Where This Shows Up
+    // ========================================
+
+    sledAngle: {
+        defaultValue: 35,
+        type: 'number',
+        label: 'Rope angle',
+        description: 'Angle of the sled rope above the ground',
+        unit: '\u00b0',
+        min: 15,
+        max: 80,
+        step: 1,
+        color: '#334155',
+    },
+
+    sledHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Sled figure highlight',
+        description: 'Which part of the rope pull is highlighted on hover',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
+    },
+
+    joystickAngle: {
+        defaultValue: 35,
+        type: 'number',
+        label: 'Joystick direction',
+        description: 'Direction the joystick is pushed, measured from the positive x-axis',
+        unit: '\u00b0',
+        min: 0,
+        max: 360,
+        step: 1,
+        color: '#334155',
+    },
+
     answerTriangleCompare: {
         defaultValue: '',
         type: 'select',
