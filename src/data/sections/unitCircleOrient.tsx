@@ -17,9 +17,9 @@ export const unitCircleOrientBlocks: ReactElement[] = [
     <StackLayout key="layout-orient-hook" maxWidth="xl">
         <Block id="orient-hook" padding="sm">
             <EditableParagraph id="para-orient-hook" blockId="orient-hook" className={POINT_LIST_CLASS}>
-                <Point>Spin the top plate of a Lego turntable and every stud travels a perfect circle.</Point>
-                <Point>Pin any stud down with just two numbers: how far across it sits, and how far up.</Point>
-                <Point>Those two numbers are what trigonometry is really made of.</Point>
+                <Point>Picture a Ferris wheel. One seat goes round and round, always the same distance from the centre.</Point>
+                <Point>To say exactly where that seat is right now, you only need two measurements: how far it sits to the side of the centre, and how high it sits above it.</Point>
+                <Point>Those two measurements have names. The sideways one is the cosine of the angle, and the upward one is the sine. That is the whole idea behind trigonometry.</Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
