@@ -28,24 +28,24 @@ export const unitCircleOrientBlocks: ReactElement[] = [
         <Block id="orient-promise" padding="sm">
             <EditableParagraph id="para-orient-promise" blockId="orient-promise" className={POINT_LIST_CLASS}>
                 <Point>
-                    You already have the pieces:{" "}
+                    You already know{" "}
                     <InlineTooltip id="tooltip-orient-ratios" tooltip="In a right-angled triangle, sine is opposite over hypotenuse and cosine is adjacent over hypotenuse.">
                         sine and cosine
                     </InlineTooltip>
-                    {" "}in a right-angled triangle,{" "}
+                    {" "}from right-angled triangles, and you know{" "}
                     <InlineTooltip id="tooltip-orient-pythagoras" tooltip="The squares on the two shorter sides of a right-angled triangle add up to the square on the longest side.">
                         Pythagoras' theorem
                     </InlineTooltip>
-                    , and angles measured from the positive x-axis.
+                    : the two short sides, squared, add up to the long side squared.
                 </Point>
-                <Point>Put them together on a circle of radius 1 and something neat falls out.</Point>
+                <Point>Now we shrink that Ferris wheel down to a circle with radius 1 and put its centre at the origin. The angle is measured round from the positive x-axis, and the seat's two measurements become the cosine and the sine themselves, with no dividing to do.</Point>
                 <Point>
-                    By the end you will read sine and cosine straight off that circle, and see why{" "}
+                    By the end you will read both of them straight off the circle, and see why{" "}
                     <InlineFormula
                         latex="\clr{sin}{\sin^2}\clr{angle}{\theta} + \clr{cos}{\cos^2}\clr{angle}{\theta} = \clr{total}{1}"
                         colorMap={{ angle: ANGLE_HUE, cos: COS_HUE, sin: SIN_HUE, total: TOTAL_HUE }}
                     />
-                    {" "}has no choice but to be true.
+                    {" "}is really just Pythagoras' theorem in disguise.
                 </Point>
             </EditableParagraph>
         </Block>
