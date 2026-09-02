@@ -4,9 +4,9 @@ import { Block } from "@/components/templates";
 import {
     EditableH2,
     EditableParagraph,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
-    ImageDisplay,
     InteractionHintSequence,
     VideoDisplay,
 } from "@/components/atoms";
@@ -20,13 +20,17 @@ import {
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5";
-const SIN_HUE = "#AC8BF9";
-const HANDLE_HUE = "#62D0AD";
-const TARGET_HUE = "#F7B23B";
+import {
+    ANGLE_HUE,
+    COS_HUE,
+    HANDLE_HUE,
+    INK,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+    TARGET_HUE,
+} from "./palette";
+
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtRatio = (value: number) => value.toFixed(2);
@@ -234,7 +238,7 @@ function SledPullDrawing() {
             </g>
 
             <g opacity={dimOthers} style={ease}>
-                <text x={SLED_PAD} y={332} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={SLED_PAD} y={332} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
                 <text x={SLED_WIDTH - SLED_PAD} y={332} fill={INK} fontSize="13" textAnchor="end" style={{ fontVariantNumeric: "tabular-nums" }}>
@@ -507,13 +511,21 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
             <EditableParagraph id="para-applications-sled" blockId="applications-sled" className={POINT_LIST_CLASS}>
                 <Point>None of this is stuck inside a maths lesson.</Point>
                 <Point>
-                    Drag a weight sled with the rope at θ ={" "}
+                    Drag a weight sled with the rope at <InlineFormula latex="\clr{sledAngle}{\theta}" colorMap={{ sledAngle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="sledAngle"
                         {...numberPropsFromDefinition(getVariableInfo("sledAngle"))}
                         formatValue={(v) => `${Math.round(v)}°`}
                     />
-                    {" "}and the pull splits in two: some of it drags the sled forward, the rest just{" "}
+                    {" "}and the pull splits in two: some of it{" "}
+                    <InlineLinkedHighlight
+                        varName="sledHighlight"
+                        highlightId="forward"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("sledForwardHighlight"))}
+                    >
+                        drags the sled forward
+                    </InlineLinkedHighlight>
+                    , the rest just{" "}
                     <InlineLinkedHighlight
                         varName="sledHighlight"
                         highlightId="lift"
@@ -538,7 +550,13 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
         <Block id="applications-joystick" padding="sm">
             <EditableParagraph id="para-applications-joystick" blockId="applications-joystick" className={POINT_LIST_CLASS}>
                 <Point>A game controller runs the same maths thousands of times a second.</Point>
-                <Point>Swing the knob and your character's speed is shared out between across and up.</Point>
+                <Point>
+                    Swing the knob and your character's speed is shared out between{" "}
+                    <InlineFormula latex="\text{across} = \clr{cos}{\cos\theta}" colorMap={{ cos: COS_HUE }} />
+                    {" "}and{" "}
+                    <InlineFormula latex="\text{up} = \clr{sin}{\sin\theta}" colorMap={{ sin: SIN_HUE }} />
+                    .
+                </Point>
                 <Point>Yet the brick reaches the ring in the same time whichever way you point.</Point>
             </EditableParagraph>
         </Block>

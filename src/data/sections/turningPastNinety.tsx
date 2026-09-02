@@ -7,8 +7,10 @@ import {
     InlineClozeChoice,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineSpotColor,
     InteractionHintSequence,
     RevealOnInteraction,
 } from "@/components/atoms";
@@ -19,10 +21,21 @@ import {
     choicePropsFromDefinition,
     clozePropsFromDefinition,
     getVariableInfo,
+    spotColorPropsFromDefinition,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+
+import {
+    ANGLE_HUE,
+    COS_HUE,
+    HANDLE_HUE,
+    INK,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+} from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -38,12 +51,6 @@ const SIN_BAR_X = 452;
 const BAR_WIDTH = 46;
 const SCALE_X = 322;
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5";
-const SIN_HUE = "#AC8BF9";
-const HANDLE_HUE = "#62D0AD";
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtRatio = (value: number) => value.toFixed(2);
@@ -284,7 +291,7 @@ function WalkingDotDrawing() {
 
             {/* Readouts */}
             <g opacity={dimOthers} style={ease}>
-                <text x={PAD} y={42} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={42} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
                 <text x={PAD} y={334} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
@@ -349,7 +356,13 @@ export const turningPastNinetyBlocks: ReactElement[] = [
         <Block id="quadrants-setup" padding="sm">
             <EditableParagraph id="para-quadrants-setup" blockId="quadrants-setup" className={POINT_LIST_CLASS}>
                 <Point>A right-angled triangle runs out of angles at 90°. A turntable does not.</Point>
-                <Point>Walk the teal dot on past the top of the circle and into the second quadrant.</Point>
+                <Point>
+                    Walk the{" "}
+                    <InlineSpotColor varName="quadrantAngle" {...spotColorPropsFromDefinition(getVariableInfo("quadrantAngle"))}>
+                        teal dot
+                    </InlineSpotColor>{" "}
+                    on past the top of the circle and into the second quadrant.
+                </Point>
                 <Point>The horizontal distance is now measured to the left.</Point>
             </EditableParagraph>
         </Block>
@@ -364,7 +377,17 @@ export const turningPastNinetyBlocks: ReactElement[] = [
     <StackLayout key="layout-quadrants-signs" maxWidth="xl">
         <Block id="quadrants-signs" padding="sm">
             <EditableParagraph id="para-quadrants-signs" blockId="quadrants-signs" className={POINT_LIST_CLASS}>
-                <Point>Sine and cosine are coordinates, not lengths, so they are quite happy being negative.</Point>
+                <Point>
+                    Sine and cosine are coordinates, not lengths, so the{" "}
+                    <InlineLinkedHighlight
+                        varName="quadrantHighlight"
+                        highlightId="sin"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("quadrantSinHighlight"))}
+                    >
+                        sine bar
+                    </InlineLinkedHighlight>
+                    {" "}is quite happy going negative.
+                </Point>
                 <Point>
                     The{" "}
                     <InlineLinkedHighlight
@@ -376,7 +399,14 @@ export const turningPastNinetyBlocks: ReactElement[] = [
                     </InlineLinkedHighlight>
                     {" "}dips below its zero line as soon as the dot crosses the top.
                 </Point>
-                <Point>Squaring wipes the sign out, so sin²θ + cos²θ still comes to exactly 1 in every quadrant.</Point>
+                <Point>
+                    Squaring wipes the sign out, so{" "}
+                    <InlineFormula
+                        latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
+                        colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                    />
+                    {" "}still holds in every quadrant.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -385,7 +415,7 @@ export const turningPastNinetyBlocks: ReactElement[] = [
         <Block id="quadrants-range" padding="sm">
             <EditableParagraph id="para-quadrants-range" blockId="quadrants-range" className={POINT_LIST_CLASS}>
                 <Point>
-                    At θ ={" "}
+                    At <InlineFormula latex="\clr{quadrantAngle}{\theta}" colorMap={{ quadrantAngle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="quadrantAngle"
                         {...numberPropsFromDefinition(getVariableInfo("quadrantAngle"))}

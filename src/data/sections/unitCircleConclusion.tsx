@@ -1,8 +1,9 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH2, EditableParagraph } from "@/components/atoms";
+import { EditableH2, EditableParagraph, InlineFormula } from "@/components/atoms";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+import { COS_HUE, SIN_HUE } from "./palette";
 
 export const unitCircleConclusionBlocks: ReactElement[] = [
     <StackLayout key="layout-conclusion-heading" maxWidth="xl">
@@ -16,7 +17,13 @@ export const unitCircleConclusionBlocks: ReactElement[] = [
     <StackLayout key="layout-conclusion-insight" maxWidth="xl">
         <Block id="conclusion-insight" padding="sm">
             <EditableParagraph id="para-conclusion-insight" blockId="conclusion-insight" className={POINT_LIST_CLASS}>
-                <Point>sin²θ + cos²θ = 1 was never really a formula to memorise.</Point>
+                <Point>
+                    <InlineFormula
+                        latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
+                        colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                    />
+                    {" "}was never really a formula to memorise.
+                </Point>
                 <Point>It is Pythagoras' theorem on a triangle whose hypotenuse happens to be 1.</Point>
                 <Point>And it was hiding inside a circle you already knew how to draw.</Point>
             </EditableParagraph>

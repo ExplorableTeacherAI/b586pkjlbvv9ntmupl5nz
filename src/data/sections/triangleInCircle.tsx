@@ -6,8 +6,10 @@ import {
     EditableParagraph,
     InlineClozeChoice,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineSpotColor,
     InteractionHintSequence,
     RevealOnInteraction,
 } from "@/components/atoms";
@@ -17,10 +19,21 @@ import { clamp, useSpring } from "@/lib/motion";
 import {
     choicePropsFromDefinition,
     getVariableInfo,
+    spotColorPropsFromDefinition,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+
+import {
+    ANGLE_HUE,
+    COS_HUE,
+    HANDLE_HUE,
+    INK,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+} from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -29,12 +42,6 @@ const VIEW_HEIGHT = 420;
 const ORIGIN = { x: 200, y: 250 };
 const UNIT = 105; // pixels per unit of radius
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5"; // horizontal side
-const SIN_HUE = "#AC8BF9"; // vertical side
-const HANDLE_HUE = "#62D0AD"; // the draggable point
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtRatio = (value: number) => value.toFixed(2);
@@ -128,8 +135,8 @@ function UnitCircleTriangleDrawing() {
 
             {/* Angle arc */}
             <g opacity={dimOthers} style={ease}>
-                <path d={arcPath} fill="none" stroke={INK_STRUCTURE} strokeWidth="1.5" strokeLinecap="round" />
-                <text x={thetaGlyph.x} y={thetaGlyph.y} fill={INK} fontSize="13" textAnchor="middle">θ</text>
+                <path d={arcPath} fill="none" stroke={ANGLE_HUE} strokeWidth="2" strokeLinecap="round" />
+                <text x={thetaGlyph.x} y={thetaGlyph.y} fill={ANGLE_HUE} fontSize="13" textAnchor="middle">θ</text>
             </g>
 
             {/* Hypotenuse — the radius, always 1 */}
@@ -233,7 +240,7 @@ function UnitCircleTriangleDrawing() {
 
             {/* Readouts, beside the drawing rather than over it */}
             <g opacity={dimOthers} style={ease}>
-                <text x={24} y={388} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={24} y={388} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
                 <text x={VIEW_WIDTH - 24} y={388} fontSize="13" textAnchor="end" fill={INK} style={{ fontVariantNumeric: "tabular-nums" }}>
@@ -293,8 +300,18 @@ export const triangleInCircleBlocks: ReactElement[] = [
     <StackLayout key="layout-triangle-setup" maxWidth="xl">
         <Block id="triangle-setup" padding="sm">
             <EditableParagraph id="para-triangle-setup" blockId="triangle-setup" className={POINT_LIST_CLASS}>
-                <Point>A circle of radius 1, centred on the origin, with a point on the rim at an angle θ from the positive x-axis.</Point>
-                <Point>Drag that teal point around the rim and a right-angled triangle follows it everywhere.</Point>
+                <Point>
+                    A circle of radius 1, centred on the origin, with a point on the rim at an angle{" "}
+                    <InlineFormula latex="\clr{unitCircleAngle}{\theta}" colorMap={{ unitCircleAngle: ANGLE_HUE }} />
+                    {" "}from the positive x-axis.
+                </Point>
+                <Point>
+                    Drag that{" "}
+                    <InlineSpotColor varName="unitCircleAngle" {...spotColorPropsFromDefinition(getVariableInfo("unitCircleAngle"))}>
+                        teal point
+                    </InlineSpotColor>{" "}
+                    around the rim and a right-angled triangle follows it everywhere.
+                </Point>
                 <Point>The radius itself is always the hypotenuse.</Point>
             </EditableParagraph>
         </Block>
@@ -310,7 +327,7 @@ export const triangleInCircleBlocks: ReactElement[] = [
         <Block id="triangle-coordinates" padding="sm">
             <EditableParagraph id="para-triangle-coordinates" blockId="triangle-coordinates" className={POINT_LIST_CLASS}>
                 <Point>
-                    At θ ={" "}
+                    At <InlineFormula latex="\clr{unitCircleAngle}{\theta}" colorMap={{ unitCircleAngle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="unitCircleAngle"
                         {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
@@ -319,7 +336,8 @@ export const triangleInCircleBlocks: ReactElement[] = [
                     {" "}the slanted side is still exactly 1 unit long, which makes SOH CAH TOA unusually kind.
                 </Point>
                 <Point>
-                    cos θ = adjacent ÷ 1, so the{" "}
+                    <InlineFormula latex="\clr{cos}{\cos\theta} = \text{adjacent} \div 1" colorMap={{ cos: COS_HUE }} />
+                    , so the{" "}
                     <InlineLinkedHighlight
                         varName="unitCircleHighlight"
                         highlightId="cos"
@@ -327,10 +345,11 @@ export const triangleInCircleBlocks: ReactElement[] = [
                     >
                         flat side
                     </InlineLinkedHighlight>
-                    {" "}is simply cos θ.
+                    {" "}is simply <InlineFormula latex="\clr{cos}{\cos\theta}" colorMap={{ cos: COS_HUE }} />.
                 </Point>
                 <Point>
-                    sin θ = opposite ÷ 1, so the{" "}
+                    <InlineFormula latex="\clr{sin}{\sin\theta} = \text{opposite} \div 1" colorMap={{ sin: SIN_HUE }} />
+                    , so the{" "}
                     <InlineLinkedHighlight
                         varName="unitCircleHighlight"
                         highlightId="sin"
@@ -338,9 +357,16 @@ export const triangleInCircleBlocks: ReactElement[] = [
                     >
                         upright side
                     </InlineLinkedHighlight>
-                    {" "}is sin θ.
+                    {" "}is <InlineFormula latex="\clr{sin}{\sin\theta}" colorMap={{ sin: SIN_HUE }} />.
                 </Point>
-                <Point>So the point is sitting at (cos θ, sin θ).</Point>
+                <Point>
+                    So the point is sitting at{" "}
+                    <InlineFormula
+                        latex="(\clr{cos}{\cos\theta},\; \clr{sin}{\sin\theta})"
+                        colorMap={{ cos: COS_HUE, sin: SIN_HUE }}
+                    />
+                    .
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

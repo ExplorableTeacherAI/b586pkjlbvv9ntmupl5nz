@@ -7,6 +7,8 @@ import {
     InlineClozeChoice,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
+    InlineSpotColor,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InteractionHintSequence,
@@ -19,10 +21,23 @@ import {
     choicePropsFromDefinition,
     clozePropsFromDefinition,
     getVariableInfo,
+    spotColorPropsFromDefinition,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+
+import {
+    ANGLE_HUE,
+    COS_HUE,
+    FOUND_HUE,
+    HANDLE_HUE,
+    INK,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+    TARGET_HUE,
+} from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -33,14 +48,6 @@ const CENTRE = { x: 185, y: 190 };
 const RADIUS = 120;
 const HIT_TOLERANCE = 0.02;
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5";
-const SIN_HUE = "#AC8BF9";
-const TARGET_HUE = "#F7B23B";
-const HANDLE_HUE = "#62D0AD";
-const FOUND_HUE = "#22c55e";
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtRatio = (value: number) => value.toFixed(2);
@@ -256,7 +263,7 @@ function TargetCosineDrawing() {
                 <text x={VIEW_WIDTH - PAD} y={212} fill={INK} fontSize="13" textAnchor="end" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`found ${foundCount} of 2`}
                 </text>
-                <text x={PAD} y={352} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={352} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
             </g>
@@ -317,8 +324,29 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
         <Block id="apply-setup" padding="sm">
             <EditableParagraph id="para-apply-setup" blockId="apply-setup" className={POINT_LIST_CLASS}>
                 <Point>The identity earns its keep the moment you know one ratio and need the other.</Point>
-                <Point>Say cos θ = 0.6: then sin²θ = 1 − 0.36 = 0.64, so sin θ = ±0.8.</Point>
-                <Point>Steer the teal dot round the rim until its dashed line lands on the amber target.</Point>
+                <Point>
+                    Say{" "}
+                    <InlineFormula latex="\clr{cos}{\cos\theta} = 0.6" colorMap={{ cos: COS_HUE }} />
+                    : then{" "}
+                    <InlineFormula
+                        latex="\clr{sin}{\sin^2\theta} = 1 - 0.36 = 0.64"
+                        colorMap={{ sin: SIN_HUE }}
+                    />
+                    , so{" "}
+                    <InlineFormula latex="\clr{sin}{\sin\theta} = \pm 0.8" colorMap={{ sin: SIN_HUE }} />
+                    .
+                </Point>
+                <Point>
+                    Steer the{" "}
+                    <InlineSpotColor varName="applyAngle" {...spotColorPropsFromDefinition(getVariableInfo("applyAngle"))}>
+                        teal dot
+                    </InlineSpotColor>
+                    {" "}round the rim until its dashed line lands on the{" "}
+                    <InlineSpotColor varName="applyTargetCos" {...spotColorPropsFromDefinition(getVariableInfo("applyTargetCos"))}>
+                        amber target
+                    </InlineSpotColor>
+                    .
+                </Point>
                 <Point>Then go hunting for the second spot that hits it too.</Point>
             </EditableParagraph>
         </Block>

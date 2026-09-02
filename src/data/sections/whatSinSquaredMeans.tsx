@@ -6,6 +6,7 @@ import {
     EditableParagraph,
     InlineClozeChoice,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InteractionHintSequence,
@@ -21,6 +22,14 @@ import {
     numberPropsFromDefinition,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+
+import {
+    ANGLE_HUE,
+    IMPOSTOR_HUE,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+} from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
 
@@ -39,11 +48,6 @@ const PLACED_Y = 222; // centre of a chip resting under the line
 const TRAY_Y = 285; // centre of a chip waiting in the tray
 const DROP_THRESHOLD = 244; // release above this line and the marker is placed
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const SIN_HUE = "#AC8BF9";
-const IMPOSTOR_HUE = "#94A3B8";
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtRatio = (value: number) => value.toFixed(2);
@@ -320,7 +324,7 @@ function GuessTheSquareDrawing() {
             />
 
             <g opacity={dimOthers} style={ease}>
-                <text x={PAD} y={42} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={42} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
                 <text x={VIEW_WIDTH - PAD} y={42} fill={INK_STRUCTURE} fontSize="12" textAnchor="end">
@@ -382,9 +386,15 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
     <StackLayout key="layout-notation-setup" maxWidth="xl">
         <Block id="notation-setup" padding="sm">
             <EditableParagraph id="para-notation-setup" blockId="notation-setup" className={POINT_LIST_CLASS}>
-                <Point>One piece of shorthand trips almost everyone up: sin²θ and sin(θ²).</Point>
                 <Point>
-                    At θ ={" "}
+                    One piece of shorthand trips almost everyone up:{" "}
+                    <InlineFormula latex="\clr{sin}{\sin^2\theta}" colorMap={{ sin: SIN_HUE }} />
+                    {" "}and{" "}
+                    <InlineFormula latex="\clr{impostor}{\sin(\theta^2)}" colorMap={{ impostor: IMPOSTOR_HUE }} />
+                    .
+                </Point>
+                <Point>
+                    At <InlineFormula latex="\clr{notationAngle}{\theta}" colorMap={{ notationAngle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="notationAngle"
                         {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
@@ -412,11 +422,20 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
                         highlightId="sinSquared"
                         {...linkedHighlightPropsFromDefinition(getVariableInfo("notationHighlight"))}
                     >
-                        sin²θ
+                        <InlineFormula latex="\sin^2\theta" colorMap={{}} />
                     </InlineLinkedHighlight>
                     {" "}takes the sine first, then squares it, so it never escapes the stretch from 0 to 1.
                 </Point>
-                <Point>sin(θ²) squares the angle first, which sends the answer anywhere on the line, negatives included.</Point>
+                <Point>
+                    <InlineLinkedHighlight
+                        varName="notationHighlight"
+                        highlightId="sinOfSquared"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("notationImpostorHighlight"))}
+                    >
+                        <InlineFormula latex="\sin(\theta^2)" colorMap={{}} />
+                    </InlineLinkedHighlight>
+                    {" "}squares the angle first, which sends the answer anywhere on the line, negatives included.
+                </Point>
                 <Point>Two brackets are all that separate them.</Point>
             </EditableParagraph>
         </Block>

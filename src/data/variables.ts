@@ -94,7 +94,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 15,
         max: 80,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     unitCircleHighlight: {
@@ -156,7 +156,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 15,
         max: 80,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     notationGuessSinSquared: {
@@ -209,6 +209,15 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Which marker on the number line is highlighted on hover',
         color: '#AC8BF9',
         bgColor: 'rgba(172, 139, 249, 0.20)',
+    },
+
+    notationImpostorHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Notation impostor highlight',
+        description: 'Highlight trigger coloured for the sine of theta squared impostor',
+        color: '#94A3B8',
+        bgColor: 'rgba(148, 163, 184, 0.20)',
     },
 
     answerNotationSinSquared: {
@@ -278,7 +287,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 360,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     quadrantTrailMax: {
@@ -312,6 +321,15 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Which quantity in the walking-dot figure is highlighted on hover',
         color: '#8E90F5',
         bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    quadrantSinHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Quadrant sine highlight',
+        description: 'Highlight trigger coloured for the sine bar in the walking-dot figure',
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
     },
 
     answerQuadrantCosSign: {
@@ -348,7 +366,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 360,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     applyTargetCos: {
@@ -426,7 +444,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 15,
         max: 80,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     sledHighlight: {
@@ -438,6 +456,15 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         bgColor: 'rgba(172, 139, 249, 0.20)',
     },
 
+    sledForwardHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Sled forward highlight',
+        description: 'Highlight trigger coloured for the forward (cosine) part of the pull',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
     joystickAngle: {
         defaultValue: 35,
         type: 'number',
@@ -447,7 +474,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 360,
         step: 1,
-        color: '#334155',
+        color: '#62D0AD',
     },
 
     answerTriangleCompare: {

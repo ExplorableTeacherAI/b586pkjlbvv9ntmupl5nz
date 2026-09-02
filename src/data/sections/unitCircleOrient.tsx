@@ -1,8 +1,9 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineFormula } from "@/components/atoms";
 import { Point, POINT_LIST_CLASS } from "./pointList";
+import { COS_HUE, SIN_HUE } from "./palette";
 
 export const unitCircleOrientBlocks: ReactElement[] = [
     <StackLayout key="layout-orient-title" maxWidth="xl">
@@ -28,7 +29,14 @@ export const unitCircleOrientBlocks: ReactElement[] = [
             <EditableParagraph id="para-orient-promise" blockId="orient-promise" className={POINT_LIST_CLASS}>
                 <Point>You already have the pieces: sine and cosine in a right-angled triangle, Pythagoras' theorem, and angles measured from the positive x-axis.</Point>
                 <Point>Put them together on a circle of radius 1 and something neat falls out.</Point>
-                <Point>By the end you will read sine and cosine straight off that circle, and see why sin²θ + cos²θ = 1 has no choice but to be true.</Point>
+                <Point>
+                    By the end you will read sine and cosine straight off that circle, and see why{" "}
+                    <InlineFormula
+                        latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
+                        colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                    />
+                    {" "}has no choice but to be true.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

@@ -6,6 +6,7 @@ import {
     EditableParagraph,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InteractionHintSequence,
@@ -22,6 +23,15 @@ import {
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
 
+import {
+    ANGLE_HUE,
+    COS_HUE,
+    INK,
+    INK_QUIET,
+    INK_STRUCTURE,
+    SIN_HUE,
+} from "./palette";
+
 // ── View constants ───────────────────────────────────────────────────────────
 
 const VIEW_WIDTH = 540;
@@ -31,11 +41,6 @@ const UNIT = 92; // pixels for one unit of length
 const CORNER = { x: 110, y: 215 }; // right-angle corner of the triangle
 const UNIT_SQUARE = { x: 370, y: 123, size: UNIT }; // the empty square of side 1
 
-const INK = "#334155";
-const INK_STRUCTURE = "#64748B";
-const INK_QUIET = "#CBD5E1";
-const COS_HUE = "#8E90F5";
-const SIN_HUE = "#AC8BF9";
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 const fmtArea = (value: number) => value.toFixed(2);
@@ -326,7 +331,7 @@ function BrickSquaresDrawing() {
 
             {/* Readouts, below the drawing */}
             <g opacity={dimOthers} style={ease}>
-                <text x={PAD} y={372} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={372} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
                 <text
@@ -409,9 +414,15 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
         <Block id="squares-setup" padding="sm">
             <EditableParagraph id="para-squares-setup" blockId="squares-setup" className={POINT_LIST_CLASS}>
                 <Point>Pythagoras: the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared.</Point>
-                <Point>Our triangle has sides cos θ and sin θ, and a hypotenuse of 1.</Point>
                 <Point>
-                    At θ ={" "}
+                    Our triangle has sides{" "}
+                    <InlineFormula latex="\clr{cos}{\cos\theta}" colorMap={{ cos: COS_HUE }} />
+                    {" "}and{" "}
+                    <InlineFormula latex="\clr{sin}{\sin\theta}" colorMap={{ sin: SIN_HUE }} />
+                    , and a hypotenuse of 1.
+                </Point>
+                <Point>
+                    At <InlineFormula latex="\clr{unitCircleAngle}{\theta}" colorMap={{ unitCircleAngle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="unitCircleAngle"
                         {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
@@ -453,7 +464,15 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
                     >
                         upright square
                     </InlineLinkedHighlight>
-                    {" "}grows by exactly what the flat one loses.
+                    {" "}grows by exactly what the{" "}
+                    <InlineLinkedHighlight
+                        varName="squaresHighlight"
+                        highlightId="cos"
+                        {...linkedHighlightPropsFromDefinition(getVariableInfo("squaresHighlight"))}
+                    >
+                        flat square
+                    </InlineLinkedHighlight>
+                    {" "}loses.
                 </Point>
                 <Point>So the identity is not a rule to memorise: it is Pythagoras with a hypotenuse of 1.</Point>
             </EditableParagraph>
@@ -464,9 +483,17 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
         <Block id="squares-question-identity" padding="sm">
             <EditableParagraph id="para-squares-question-identity" blockId="squares-question-identity" className={POINT_LIST_CLASS}>
                 <RevealOnInteraction varName="squaresExplored">
-                    <Point>An acute angle has cos θ = 0.6, so cos²θ = 0.36.</Point>
                     <Point>
-                    For the identity to hold, sin²θ must be{" "}
+                        An acute angle has{" "}
+                        <InlineFormula latex="\clr{cos}{\cos\theta} = 0.6" colorMap={{ cos: COS_HUE }} />
+                        , so{" "}
+                        <InlineFormula latex="\clr{cos}{\cos^2\theta} = 0.36" colorMap={{ cos: COS_HUE }} />
+                        .
+                    </Point>
+                    <Point>
+                    For the identity to hold,{" "}
+                    <InlineFormula latex="\clr{sin}{\sin^2\theta}" colorMap={{ sin: SIN_HUE }} />
+                    {" "}must be{" "}
                     <InlineFeedback
                         varName="answerSquaresIdentity"
                         correctValue={["0.64", ".64", "16/25"]}
