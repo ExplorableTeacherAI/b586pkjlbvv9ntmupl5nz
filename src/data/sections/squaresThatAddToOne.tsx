@@ -9,6 +9,8 @@ import {
     InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineTooltip,
+    InlineTrigger,
     InteractionHintSequence,
     RevealOnInteraction,
 } from "@/components/atoms";
@@ -26,10 +28,10 @@ import { Point, POINT_LIST_CLASS } from "./pointList";
 import {
     ANGLE_HUE,
     COS_HUE,
-    INK,
-    INK_QUIET,
     INK_STRUCTURE,
+    RADIUS_HUE,
     SIN_HUE,
+    TOTAL_HUE,
 } from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
@@ -206,6 +208,14 @@ function BrickSquaresDrawing() {
     const radians = toRadians(angle);
     const cosValue = Math.cos(radians);
     const sinValue = Math.sin(radians);
+
+    // Publish both areas and their total so the formulas can read them live.
+    useEffect(() => {
+        setVar("squaresCosSquared", Number((cosValue * cosValue).toFixed(2)));
+        setVar("squaresSinSquared", Number((sinValue * sinValue).toFixed(2)));
+        setVar("squaresTotal", Number((cosValue * cosValue + sinValue * sinValue).toFixed(2)));
+    }, [cosValue, sinValue, setVar]);
+
     const cosLength = UNIT * cosValue;
     const sinLength = UNIT * sinValue;
 
@@ -265,14 +275,14 @@ function BrickSquaresDrawing() {
                     y1={CORNER.y}
                     x2={apex.x}
                     y2={apex.y}
-                    stroke={INK_STRUCTURE}
-                    strokeWidth="2.5"
+                    stroke={RADIUS_HUE}
+                    strokeWidth="2.8"
                     strokeLinecap="round"
                 />
                 <text
                     x={CORNER.x + cosLength / 2 - 12 * sinValue}
                     y={CORNER.y - sinLength / 2 - 10 * cosValue}
-                    fill={INK_STRUCTURE}
+                    fill={RADIUS_HUE}
                     fontSize="12"
                     textAnchor="middle"
                 >
@@ -288,15 +298,15 @@ function BrickSquaresDrawing() {
                     width={UNIT_SQUARE.size}
                     height={UNIT_SQUARE.size}
                     fill="#FFFFFF"
-                    stroke={INK_QUIET}
+                    stroke={TOTAL_HUE}
                     strokeWidth="2"
                     strokeDasharray="6 5"
                     rx={2}
                 />
-                <text x={UNIT_SQUARE.x + UNIT_SQUARE.size / 2} y={UNIT_SQUARE.y - 10} fill={INK_STRUCTURE} fontSize="12" textAnchor="middle">
+                <text x={UNIT_SQUARE.x + UNIT_SQUARE.size / 2} y={UNIT_SQUARE.y - 10} fill={TOTAL_HUE} fontSize="12" textAnchor="middle">
                     1
                 </text>
-                <text x={UNIT_SQUARE.x - 10} y={UNIT_SQUARE.y + UNIT_SQUARE.size / 2 + 4} fill={INK_STRUCTURE} fontSize="12" textAnchor="end">
+                <text x={UNIT_SQUARE.x - 10} y={UNIT_SQUARE.y + UNIT_SQUARE.size / 2 + 4} fill={TOTAL_HUE} fontSize="12" textAnchor="end">
                     1
                 </text>
             </g>
@@ -337,14 +347,14 @@ function BrickSquaresDrawing() {
                 <text
                     x={VIEW_WIDTH - PAD}
                     y={372}
-                    fill={INK}
+                    fill={INK_STRUCTURE}
                     fontSize="13"
                     textAnchor="end"
                     style={{ fontVariantNumeric: "tabular-nums" }}
                 >
                     cos²θ + sin²θ = <tspan fill={COS_HUE}>{fmtArea(cosValue * cosValue)}</tspan> +{" "}
                     <tspan fill={SIN_HUE}>{fmtArea(sinValue * sinValue)}</tspan> ={" "}
-                    {fmtArea(cosValue * cosValue + sinValue * sinValue)}
+                    <tspan fill={TOTAL_HUE}>{fmtArea(cosValue * cosValue + sinValue * sinValue)}</tspan>
                 </text>
             </g>
         </svg>
@@ -413,16 +423,21 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
     <StackLayout key="layout-squares-setup" maxWidth="xl">
         <Block id="squares-setup" padding="sm">
             <EditableParagraph id="para-squares-setup" blockId="squares-setup" className={POINT_LIST_CLASS}>
-                <Point>Pythagoras: the two shorter sides of a right triangle, each squared, add up to the hypotenuse squared.</Point>
+                <Point>
+                    <InlineTooltip id="tooltip-pythagoras" tooltip="In any right-angled triangle, the squares built on the two shorter sides have the same total area as the square on the longest side.">
+                        Pythagoras' theorem
+                    </InlineTooltip>
+                    : the two shorter sides, each squared, add up to the hypotenuse squared.
+                </Point>
                 <Point>
                     Our triangle has sides{" "}
-                    <InlineFormula latex="\clr{cos}{\cos\theta}" colorMap={{ cos: COS_HUE }} />
+                    <InlineFormula latex="\clr{cos}{\cos}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, cos: COS_HUE }} />
                     {" "}and{" "}
-                    <InlineFormula latex="\clr{sin}{\sin\theta}" colorMap={{ sin: SIN_HUE }} />
+                    <InlineFormula latex="\clr{sin}{\sin}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }} />
                     , and a hypotenuse of 1.
                 </Point>
                 <Point>
-                    At <InlineFormula latex="\clr{unitCircleAngle}{\theta}" colorMap={{ unitCircleAngle: ANGLE_HUE }} /> ={" "}
+                    At <InlineFormula latex="\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="unitCircleAngle"
                         {...numberPropsFromDefinition(getVariableInfo("unitCircleAngle"))}
@@ -443,8 +458,20 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
     <StackLayout key="layout-squares-formula" maxWidth="xl">
         <Block id="squares-formula" padding="lg">
             <FormulaBlock
-                latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
-                colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                latex="\highlight{sin}{\sin^2\theta} + \highlight{cos}{\cos^2\theta} = \cloze{answerSquaresTotal}"
+                colorMap={{}}
+                linkedHighlights={{
+                    sin: { varName: "squaresHighlight", color: SIN_HUE, bgColor: "rgba(172, 139, 249, 0.20)" },
+                    cos: { varName: "squaresHighlight", color: COS_HUE, bgColor: "rgba(142, 144, 245, 0.20)" },
+                }}
+                clozeInputs={{
+                    answerSquaresTotal: {
+                        correctAnswer: "1 | 1.0 | one",
+                        placeholder: "???",
+                        color: TOTAL_HUE,
+                        bgColor: "rgba(248, 160, 205, 0.20)",
+                    },
+                }}
             />
         </Block>
     </StackLayout>,
@@ -474,7 +501,17 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
                     </InlineLinkedHighlight>
                     {" "}loses.
                 </Point>
-                <Point>So the identity is not a rule to memorise: it is Pythagoras with a hypotenuse of 1.</Point>
+                <Point>
+                    So this{" "}
+                    <InlineTooltip id="tooltip-identity" tooltip="An identity is an equation that stays true for every value you put into it, not just for a special few.">
+                        identity
+                    </InlineTooltip>
+                    {" "}is not a rule to memorise: it is Pythagoras with a hypotenuse of 1, even at a lopsided{" "}
+                    <InlineTrigger varName="unitCircleAngle" value={53} icon="zap">
+                        53°
+                    </InlineTrigger>
+                    .
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -485,14 +522,14 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
                 <RevealOnInteraction varName="squaresExplored">
                     <Point>
                         An acute angle has{" "}
-                        <InlineFormula latex="\clr{cos}{\cos\theta} = 0.6" colorMap={{ cos: COS_HUE }} />
+                        <InlineFormula latex="\clr{cos}{\cos}\clr{angle}{\theta} = \clr{cos}{0.6}" colorMap={{ angle: ANGLE_HUE, cos: COS_HUE }} />
                         , so{" "}
-                        <InlineFormula latex="\clr{cos}{\cos^2\theta} = 0.36" colorMap={{ cos: COS_HUE }} />
+                        <InlineFormula latex="\clr{cos}{\cos^2}\clr{angle}{\theta} = \clr{cos}{0.36}" colorMap={{ angle: ANGLE_HUE, cos: COS_HUE }} />
                         .
                     </Point>
                     <Point>
                     For the identity to hold,{" "}
-                    <InlineFormula latex="\clr{sin}{\sin^2\theta}" colorMap={{ sin: SIN_HUE }} />
+                    <InlineFormula latex="\clr{sin}{\sin^2}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }} />
                     {" "}must be{" "}
                     <InlineFeedback
                         varName="answerSquaresIdentity"

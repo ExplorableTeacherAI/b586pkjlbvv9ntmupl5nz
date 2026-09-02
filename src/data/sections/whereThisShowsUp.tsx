@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactElement } from "react";
+import { useEffect, useRef, useState, type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
 import {
@@ -7,6 +7,8 @@ import {
     InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineTooltip,
+    InlineTrigger,
     InteractionHintSequence,
     VideoDisplay,
 } from "@/components/atoms";
@@ -27,6 +29,7 @@ import {
     INK,
     INK_QUIET,
     INK_STRUCTURE,
+    RADIUS_HUE,
     SIN_HUE,
     TARGET_HUE,
 } from "./palette";
@@ -90,8 +93,8 @@ function SledPullDrawing() {
             aria-label="A weight sled pulled by a rope at an angle, with the forward and lifting parts of the pull drawn"
         >
             <defs>
-                <marker id="sled-arrow-ink" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-                    <path d="M 0 0 L 9 4.5 L 0 9 z" fill={INK_STRUCTURE} />
+                <marker id="sled-arrow-radius" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                    <path d="M 0 0 L 9 4.5 L 0 9 z" fill={RADIUS_HUE} />
                 </marker>
                 <marker id="sled-arrow-cos" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
                     <path d="M 0 0 L 9 4.5 L 0 9 z" fill={COS_HUE} />
@@ -130,23 +133,23 @@ function SledPullDrawing() {
             {/* The whole pull along the rope */}
             <g opacity={dim("pull")} style={ease} {...hoverProps("pull")}>
                 {isActive("pull") && (
-                    <line x1={ROPE_ORIGIN.x} y1={ROPE_ORIGIN.y} x2={handle.x} y2={handle.y} stroke={INK_STRUCTURE} strokeWidth="10" opacity={0.28} strokeLinecap="round" />
+                    <line x1={ROPE_ORIGIN.x} y1={ROPE_ORIGIN.y} x2={handle.x} y2={handle.y} stroke={RADIUS_HUE} strokeWidth="11" opacity={0.28} strokeLinecap="round" />
                 )}
                 <line
                     x1={ROPE_ORIGIN.x}
                     y1={ROPE_ORIGIN.y}
                     x2={handle.x}
                     y2={handle.y}
-                    stroke={INK_STRUCTURE}
-                    strokeWidth={isActive("pull") ? 4 : 2.5}
+                    stroke={RADIUS_HUE}
+                    strokeWidth={isActive("pull") ? 5 : 2.8}
                     strokeLinecap="round"
-                    markerEnd="url(#sled-arrow-ink)"
+                    markerEnd="url(#sled-arrow-radius)"
                     style={ease}
                 />
                 <text
                     x={ROPE_ORIGIN.x + (ROPE_LENGTH / 2) * cosValue - 18 * sinValue}
                     y={ROPE_ORIGIN.y - (ROPE_LENGTH / 2) * sinValue - 16 * cosValue}
-                    fill={INK_STRUCTURE}
+                    fill={RADIUS_HUE}
                     fontSize="12"
                     textAnchor="middle"
                 >
@@ -358,7 +361,7 @@ function JoystickDrawing() {
             {/* The two parts of the speed */}
             <line x1={GATE.x} y1={GATE.y} x2={knob.x} y2={GATE.y} stroke={COS_HUE} strokeWidth="3.2" strokeLinecap="round" />
             <line x1={knob.x} y1={GATE.y} x2={knob.x} y2={knob.y} stroke={SIN_HUE} strokeWidth="3.2" strokeLinecap="round" />
-            <line x1={GATE.x} y1={GATE.y} x2={knob.x} y2={knob.y} stroke={INK_STRUCTURE} strokeWidth="2" strokeLinecap="round" />
+            <line x1={GATE.x} y1={GATE.y} x2={knob.x} y2={knob.y} stroke={RADIUS_HUE} strokeWidth="2.8" strokeLinecap="round" />
 
             {/* The stick knob */}
             <g transform={`translate(${knob.x} ${knob.y}) scale(${handleScale})`}>
@@ -495,6 +498,32 @@ function NotationJokePanel() {
     );
 }
 
+/**
+ * Two-way bridge between the violet "lift I will put up with" number and the
+ * teal rope angle. Both directions write ROUNDED values behind an equality
+ * guard, so the pair settles after a single exchange rather than ping-ponging.
+ */
+function LiftTargetBridge() {
+    const setVar = useSetVar();
+    const target = useVar<number>("sledLiftTarget", 0.57);
+    const angle = useVar<number>("sledAngle", 35);
+
+    const angleFromTarget = Math.round(clamp((Math.asin(clamp(target, 0, 1)) * 180) / Math.PI, 15, 80));
+    const targetFromAngle = Number(Math.sin(toRadians(angle)).toFixed(2));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if (angleFromTarget !== angle) setVar("sledAngle", angleFromTarget);
+    }, [target]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if (targetFromAngle !== target) setVar("sledLiftTarget", targetFromAngle);
+    }, [angle]);
+
+    return null;
+}
+
 // ── Blocks ───────────────────────────────────────────────────────────────────
 
 export const whereThisShowsUpBlocks: ReactElement[] = [
@@ -511,7 +540,7 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
             <EditableParagraph id="para-applications-sled" blockId="applications-sled" className={POINT_LIST_CLASS}>
                 <Point>None of this is stuck inside a maths lesson.</Point>
                 <Point>
-                    Drag a weight sled with the rope at <InlineFormula latex="\clr{sledAngle}{\theta}" colorMap={{ sledAngle: ANGLE_HUE }} /> ={" "}
+                    Drag a weight sled with the rope at <InlineFormula latex="\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="sledAngle"
                         {...numberPropsFromDefinition(getVariableInfo("sledAngle"))}
@@ -535,7 +564,26 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
                     </InlineLinkedHighlight>
                     .
                 </Point>
-                <Point>Raise the handle and the two parts trade size.</Point>
+                <Point>
+                    Raise the handle and the two parts trade size: nearly flat at{" "}
+                    <InlineTrigger varName="sledAngle" value={20} icon="zap">
+                        20°
+                    </InlineTrigger>
+                    {" "}almost all of it goes forward, while at a steep{" "}
+                    <InlineTrigger varName="sledAngle" value={75} icon="zap">
+                        75°
+                    </InlineTrigger>
+                    {" "}you are mostly just lifting. It works backwards too: decide how much{" "}
+                    <InlineFormula latex="\clr{sin}{\text{lift}}" colorMap={{ sin: SIN_HUE }} />
+                    {" "}you will accept,{" "}
+                    <InlineScrubbleNumber
+                        varName="sledLiftTarget"
+                        {...numberPropsFromDefinition(getVariableInfo("sledLiftTarget"))}
+                        formatValue={(v) => v.toFixed(2)}
+                    />
+                    , and the rope angle has no choice but to follow.
+                    <LiftTargetBridge />
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -551,13 +599,29 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
             <EditableParagraph id="para-applications-joystick" blockId="applications-joystick" className={POINT_LIST_CLASS}>
                 <Point>A game controller runs the same maths thousands of times a second.</Point>
                 <Point>
-                    Swing the knob and your character's speed is shared out between{" "}
-                    <InlineFormula latex="\text{across} = \clr{cos}{\cos\theta}" colorMap={{ cos: COS_HUE }} />
+                    Swing the knob and your character's speed is shared out into two{" "}
+                    <InlineTooltip id="tooltip-components" tooltip="The across part and the up part that a single slanted arrow splits into. Together they rebuild the original arrow exactly.">
+                        components
+                    </InlineTooltip>
+                    :{" "}
+                    <InlineFormula latex="\clr{cos}{\text{across}} = \clr{cos}{\cos}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, cos: COS_HUE }} />
                     {" "}and{" "}
-                    <InlineFormula latex="\text{up} = \clr{sin}{\sin\theta}" colorMap={{ sin: SIN_HUE }} />
+                    <InlineFormula latex="\clr{sin}{\text{up}} = \clr{sin}{\sin}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }} />
                     .
                 </Point>
-                <Point>Yet the brick reaches the ring in the same time whichever way you point.</Point>
+                <Point>
+                    Point it at{" "}
+                    <InlineScrubbleNumber
+                        varName="joystickAngle"
+                        {...numberPropsFromDefinition(getVariableInfo("joystickAngle"))}
+                        formatValue={(v) => `${Math.round(v)}°`}
+                    />
+                    {" "}or at a perfect diagonal of{" "}
+                    <InlineTrigger varName="joystickAngle" value={45} icon="zap">
+                        45°
+                    </InlineTrigger>
+                    : the brick still reaches the ring in the same time.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

@@ -4,22 +4,22 @@ import { Block } from "@/components/templates";
 import {
     EditableH2,
     EditableParagraph,
-    InlineClozeChoice,
-    InlineFeedback,
     InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineSpotColor,
+    InlineTooltip,
+    InlineTrigger,
     InteractionHintSequence,
-    RevealOnInteraction,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
 import { clamp, useSpring } from "@/lib/motion";
 import {
-    choicePropsFromDefinition,
     getVariableInfo,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
+    spotColorPropsFromDefinition,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
 
@@ -388,13 +388,13 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
             <EditableParagraph id="para-notation-setup" blockId="notation-setup" className={POINT_LIST_CLASS}>
                 <Point>
                     One piece of shorthand trips almost everyone up:{" "}
-                    <InlineFormula latex="\clr{sin}{\sin^2\theta}" colorMap={{ sin: SIN_HUE }} />
+                    <InlineFormula latex="\clr{sin}{\sin^2}\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }} />
                     {" "}and{" "}
-                    <InlineFormula latex="\clr{impostor}{\sin(\theta^2)}" colorMap={{ impostor: IMPOSTOR_HUE }} />
+                    <InlineFormula latex="\clr{impostor}{\sin}\!\left(\clr{angle}{\theta}^{\clr{impostor}{2}}\right)" colorMap={{ angle: ANGLE_HUE, impostor: IMPOSTOR_HUE }} />
                     .
                 </Point>
                 <Point>
-                    At <InlineFormula latex="\clr{notationAngle}{\theta}" colorMap={{ notationAngle: ANGLE_HUE }} /> ={" "}
+                    At <InlineFormula latex="\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="notationAngle"
                         {...numberPropsFromDefinition(getVariableInfo("notationAngle"))}
@@ -402,7 +402,21 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
                     />
                     , both of them land somewhere on the number line below.
                 </Point>
-                <Point>Drop each marker where you think its value sits.</Point>
+                <Point>
+                    Drop the{" "}
+                    <InlineSpotColor varName="notationGuessSinSquared" {...spotColorPropsFromDefinition(getVariableInfo("notationGuessSinSquared"))}>
+                        violet marker
+                    </InlineSpotColor>
+                    {" "}and the{" "}
+                    <InlineSpotColor varName="notationGuessSinOfSquared" {...spotColorPropsFromDefinition(getVariableInfo("notationGuessSinOfSquared"))}>
+                        grey one
+                    </InlineSpotColor>
+                    {" "}where you think each lands, then try a steep{" "}
+                    <InlineTrigger varName="notationAngle" value={80} icon="zap">
+                        80°
+                    </InlineTrigger>
+                    , where squaring the angle first gives 6400°.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -422,9 +436,16 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
                         highlightId="sinSquared"
                         {...linkedHighlightPropsFromDefinition(getVariableInfo("notationHighlight"))}
                     >
-                        <InlineFormula latex="\sin^2\theta" colorMap={{}} />
+                        <InlineFormula
+                            latex="\clr{sin}{\sin^2}\clr{angle}{\theta}"
+                            colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }}
+                        />
                     </InlineLinkedHighlight>
-                    {" "}takes the sine first, then squares it, so it never escapes the stretch from 0 to 1.
+                    {" "}is shorthand for{" "}
+                    <InlineTooltip id="tooltip-sin-squared" tooltip="Read it as (sin theta) squared: take the sine of the angle first, then square the answer.">
+                        the sine squared
+                    </InlineTooltip>
+                    , so it never escapes the stretch from 0 to 1.
                 </Point>
                 <Point>
                     <InlineLinkedHighlight
@@ -432,7 +453,10 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
                         highlightId="sinOfSquared"
                         {...linkedHighlightPropsFromDefinition(getVariableInfo("notationImpostorHighlight"))}
                     >
-                        <InlineFormula latex="\sin(\theta^2)" colorMap={{}} />
+                        <InlineFormula
+                            latex="\clr{impostor}{\sin}\!\left(\clr{angle}{\theta}^{\clr{impostor}{2}}\right)"
+                            colorMap={{ angle: ANGLE_HUE, impostor: IMPOSTOR_HUE }}
+                        />
                     </InlineLinkedHighlight>
                     {" "}squares the angle first, which sends the answer anywhere on the line, negatives included.
                 </Point>

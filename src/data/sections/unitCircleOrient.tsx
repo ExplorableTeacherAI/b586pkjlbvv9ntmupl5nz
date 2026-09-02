@@ -1,9 +1,9 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph, InlineFormula } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineFormula, InlineTooltip } from "@/components/atoms";
 import { Point, POINT_LIST_CLASS } from "./pointList";
-import { COS_HUE, SIN_HUE } from "./palette";
+import { ANGLE_HUE, COS_HUE, SIN_HUE, TOTAL_HUE } from "./palette";
 
 export const unitCircleOrientBlocks: ReactElement[] = [
     <StackLayout key="layout-orient-title" maxWidth="xl">
@@ -27,13 +27,23 @@ export const unitCircleOrientBlocks: ReactElement[] = [
     <StackLayout key="layout-orient-promise" maxWidth="xl">
         <Block id="orient-promise" padding="sm">
             <EditableParagraph id="para-orient-promise" blockId="orient-promise" className={POINT_LIST_CLASS}>
-                <Point>You already have the pieces: sine and cosine in a right-angled triangle, Pythagoras' theorem, and angles measured from the positive x-axis.</Point>
+                <Point>
+                    You already have the pieces:{" "}
+                    <InlineTooltip id="tooltip-orient-ratios" tooltip="In a right-angled triangle, sine is opposite over hypotenuse and cosine is adjacent over hypotenuse.">
+                        sine and cosine
+                    </InlineTooltip>
+                    {" "}in a right-angled triangle,{" "}
+                    <InlineTooltip id="tooltip-orient-pythagoras" tooltip="The squares on the two shorter sides of a right-angled triangle add up to the square on the longest side.">
+                        Pythagoras' theorem
+                    </InlineTooltip>
+                    , and angles measured from the positive x-axis.
+                </Point>
                 <Point>Put them together on a circle of radius 1 and something neat falls out.</Point>
                 <Point>
                     By the end you will read sine and cosine straight off that circle, and see why{" "}
                     <InlineFormula
-                        latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
-                        colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                        latex="\clr{sin}{\sin^2}\clr{angle}{\theta} + \clr{cos}{\cos^2}\clr{angle}{\theta} = \clr{total}{1}"
+                        colorMap={{ angle: ANGLE_HUE, cos: COS_HUE, sin: SIN_HUE, total: TOTAL_HUE }}
                     />
                     {" "}has no choice but to be true.
                 </Point>

@@ -4,22 +4,18 @@ import { Block } from "@/components/templates";
 import {
     EditableH2,
     EditableParagraph,
-    InlineClozeChoice,
-    InlineClozeInput,
-    InlineFeedback,
     InlineFormula,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
     InlineSpotColor,
+    InlineTooltip,
+    InlineTrigger,
     InteractionHintSequence,
-    RevealOnInteraction,
 } from "@/components/atoms";
 import { Figure, FigureSlider } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
 import { useRafLoop, useSpring } from "@/lib/motion";
 import {
-    choicePropsFromDefinition,
-    clozePropsFromDefinition,
     getVariableInfo,
     spotColorPropsFromDefinition,
     linkedHighlightPropsFromDefinition,
@@ -31,10 +27,11 @@ import {
     ANGLE_HUE,
     COS_HUE,
     HANDLE_HUE,
-    INK,
     INK_QUIET,
     INK_STRUCTURE,
+    RADIUS_HUE,
     SIN_HUE,
+    TOTAL_HUE,
 } from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
@@ -162,7 +159,7 @@ function WalkingDotDrawing() {
 
             {/* Radius */}
             <g opacity={dimOthers} style={ease}>
-                <line x1={CENTRE.x} y1={CENTRE.y} x2={pointX} y2={pointY} stroke={INK_STRUCTURE} strokeWidth="2" strokeLinecap="round" />
+                <line x1={CENTRE.x} y1={CENTRE.y} x2={pointX} y2={pointY} stroke={RADIUS_HUE} strokeWidth="2.8" strokeLinecap="round" />
             </g>
 
             {/* Horizontal coordinate — cos θ — in the circle and as a bar */}
@@ -294,7 +291,7 @@ function WalkingDotDrawing() {
                 <text x={PAD} y={42} fill={ANGLE_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`θ = ${Math.round(angle)}°`}
                 </text>
-                <text x={PAD} y={334} fill={INK} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <text x={PAD} y={334} fill={TOTAL_HUE} fontSize="13" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {`sin²θ + cos²θ = ${fmtRatio(sinValue * sinValue + cosValue * cosValue)}`}
                 </text>
             </g>
@@ -361,7 +358,15 @@ export const turningPastNinetyBlocks: ReactElement[] = [
                     <InlineSpotColor varName="quadrantAngle" {...spotColorPropsFromDefinition(getVariableInfo("quadrantAngle"))}>
                         teal dot
                     </InlineSpotColor>{" "}
-                    on past the top of the circle and into the second quadrant.
+                    on past the top of the circle and into the second{" "}
+                    <InlineTooltip id="tooltip-quadrant" tooltip="One of the four regions the two axes cut the plane into, numbered I to IV anticlockwise from the top right.">
+                        quadrant
+                    </InlineTooltip>
+                    , around{" "}
+                    <InlineTrigger varName="quadrantAngle" value={135} icon="zap">
+                        135°
+                    </InlineTrigger>
+                    .
                 </Point>
                 <Point>The horizontal distance is now measured to the left.</Point>
             </EditableParagraph>
@@ -402,8 +407,8 @@ export const turningPastNinetyBlocks: ReactElement[] = [
                 <Point>
                     Squaring wipes the sign out, so{" "}
                     <InlineFormula
-                        latex="\clr{sin}{\sin^2\theta} + \clr{cos}{\cos^2\theta} = 1"
-                        colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                        latex="\clr{sin}{\sin^2}\clr{angle}{\theta} + \clr{cos}{\cos^2}\clr{angle}{\theta} = \clr{total}{1}"
+                        colorMap={{ angle: ANGLE_HUE, cos: COS_HUE, sin: SIN_HUE, total: TOTAL_HUE }}
                     />
                     {" "}still holds in every quadrant.
                 </Point>
@@ -415,7 +420,7 @@ export const turningPastNinetyBlocks: ReactElement[] = [
         <Block id="quadrants-range" padding="sm">
             <EditableParagraph id="para-quadrants-range" blockId="quadrants-range" className={POINT_LIST_CLASS}>
                 <Point>
-                    At <InlineFormula latex="\clr{quadrantAngle}{\theta}" colorMap={{ quadrantAngle: ANGLE_HUE }} /> ={" "}
+                    At <InlineFormula latex="\clr{angle}{\theta}" colorMap={{ angle: ANGLE_HUE }} /> ={" "}
                     <InlineScrubbleNumber
                         varName="quadrantAngle"
                         {...numberPropsFromDefinition(getVariableInfo("quadrantAngle"))}
@@ -423,7 +428,17 @@ export const turningPastNinetyBlocks: ReactElement[] = [
                     />
                     , or any other angle you like, neither coordinate escapes the range −1 to 1.
                 </Point>
-                <Point>The reason: the radius is pinned at 1.</Point>
+                <Point>
+                    The reason: the radius is pinned at 1, so even at{" "}
+                    <InlineTrigger varName="quadrantAngle" value={90} icon="play">
+                        90°
+                    </InlineTrigger>
+                    {" "}or{" "}
+                    <InlineTrigger varName="quadrantAngle" value={270} icon="play">
+                        270°
+                    </InlineTrigger>
+                    {" "}one coordinate simply hands everything over to the other.
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,

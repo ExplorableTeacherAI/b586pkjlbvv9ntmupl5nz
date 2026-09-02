@@ -4,26 +4,23 @@ import { Block } from "@/components/templates";
 import {
     EditableH2,
     EditableParagraph,
-    InlineClozeChoice,
-    InlineClozeInput,
-    InlineFeedback,
     InlineFormula,
     InlineSpotColor,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineTooltip,
+    InlineTrigger,
     InteractionHintSequence,
-    RevealOnInteraction,
 } from "@/components/atoms";
 import { Figure, FigureSlider, FormulaBlock } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
 import { useSpring } from "@/lib/motion";
 import {
-    choicePropsFromDefinition,
-    clozePropsFromDefinition,
     getVariableInfo,
     spotColorPropsFromDefinition,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
+    scrubVarsFromDefinitions,
 } from "../variables";
 import { Point, POINT_LIST_CLASS } from "./pointList";
 
@@ -35,8 +32,10 @@ import {
     INK,
     INK_QUIET,
     INK_STRUCTURE,
+    RADIUS_HUE,
     SIN_HUE,
     TARGET_HUE,
+    TOTAL_HUE,
 } from "./palette";
 
 // ── View constants ───────────────────────────────────────────────────────────
@@ -80,6 +79,11 @@ function TargetCosineDrawing() {
             setVar("applyFoundUpper", false);
             setVar("applyFoundLower", false);
         }
+    }, [target, setVar]);
+
+    // Publish the sine size the identity predicts for this target.
+    useEffect(() => {
+        setVar("applySinMagnitude", Number(Math.sqrt(Math.max(1 - target * target, 0)).toFixed(2)));
     }, [target, setVar]);
 
     useEffect(() => {
@@ -213,7 +217,7 @@ function TargetCosineDrawing() {
 
             {/* The steerable dot */}
             <g opacity={dimOthers} style={ease}>
-                <line x1={CENTRE.x} y1={CENTRE.y} x2={pointX} y2={pointY} stroke={INK_STRUCTURE} strokeWidth="2" strokeLinecap="round" />
+                <line x1={CENTRE.x} y1={CENTRE.y} x2={pointX} y2={pointY} stroke={RADIUS_HUE} strokeWidth="2.8" strokeLinecap="round" />
                 <g transform={`translate(${pointX} ${pointY}) scale(${handleScale})`}>
                     <circle r="9" fill={HANDLE_HUE} filter="url(#target-dot-shadow)" />
                 </g>
@@ -326,14 +330,14 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
                 <Point>The identity earns its keep the moment you know one ratio and need the other.</Point>
                 <Point>
                     Say{" "}
-                    <InlineFormula latex="\clr{cos}{\cos\theta} = 0.6" colorMap={{ cos: COS_HUE }} />
+                    <InlineFormula latex="\clr{cos}{\cos}\clr{angle}{\theta} = \clr{target}{0.6}" colorMap={{ angle: ANGLE_HUE, cos: COS_HUE, target: TARGET_HUE }} />
                     : then{" "}
                     <InlineFormula
-                        latex="\clr{sin}{\sin^2\theta} = 1 - 0.36 = 0.64"
-                        colorMap={{ sin: SIN_HUE }}
+                        latex="\clr{sin}{\sin^2}\clr{angle}{\theta} = \clr{total}{1} - \clr{cos}{0.36} = \clr{sin}{0.64}"
+                        colorMap={{ angle: ANGLE_HUE, cos: COS_HUE, sin: SIN_HUE, total: TOTAL_HUE }}
                     />
                     , so{" "}
-                    <InlineFormula latex="\clr{sin}{\sin\theta} = \pm 0.8" colorMap={{ sin: SIN_HUE }} />
+                    <InlineFormula latex="\clr{sin}{\sin}\clr{angle}{\theta} = \pm\,\clr{sin}{0.8}" colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE }} />
                     .
                 </Point>
                 <Point>
@@ -347,7 +351,13 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
                     </InlineSpotColor>
                     .
                 </Point>
-                <Point>Then go hunting for the second spot that hits it too.</Point>
+                <Point>
+                    Then go hunting for the second spot that hits it too, and try a target on the far side like{" "}
+                    <InlineTrigger varName="applyTargetCos" value={-0.5} icon="zap">
+                        -0.50
+                    </InlineTrigger>
+                    .
+                </Point>
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -355,8 +365,18 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
     <StackLayout key="layout-apply-formula" maxWidth="xl">
         <Block id="apply-formula" padding="lg">
             <FormulaBlock
-                latex="\clr{sin}{\sin\theta} = \pm\sqrt{1 - \clr{cos}{\cos^2\theta}}"
-                colorMap={{ sin: SIN_HUE, cos: COS_HUE }}
+                latex="\clr{sin}{\sin}\clr{angle}{\theta} = \choice{answerApplySign}\sqrt{\clr{total}{1} - \left(\clr{target}{\scrub{applyTargetCos}}\right)^2} = \pm\,\clr{sin}{\val{applySinMagnitude}}"
+                colorMap={{ angle: ANGLE_HUE, sin: SIN_HUE, total: TOTAL_HUE, target: TARGET_HUE }}
+                variables={scrubVarsFromDefinitions(["applyTargetCos", "applySinMagnitude"])}
+                clozeChoices={{
+                    answerApplySign: {
+                        correctAnswer: "\u00b1",
+                        options: ["+", "\u2212", "\u00b1"],
+                        placeholder: "???",
+                        color: SIN_HUE,
+                        bgColor: "rgba(172, 139, 249, 0.20)",
+                    },
+                }}
             />
         </Block>
     </StackLayout>,
@@ -388,7 +408,19 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
                     >
                         Their sines
                     </InlineLinkedHighlight>
-                    {" "}are opposite, so knowing the quadrant is what tells you which sign to keep.
+                    {" "}are opposite: jump to{" "}
+                    <InlineTrigger varName="applyAngle" value={53} icon="play">
+                        the crossing above the axis
+                    </InlineTrigger>
+                    {" "}or{" "}
+                    <InlineTrigger varName="applyAngle" value={307} icon="play">
+                        the one below
+                    </InlineTrigger>
+                    {" "}and compare. Knowing the{" "}
+                    <InlineTooltip id="tooltip-apply-quadrant" tooltip="Which of the four regions of the circle the angle lands in. It fixes whether each coordinate comes out positive or negative.">
+                        quadrant
+                    </InlineTooltip>
+                    {" "}is what tells you which sign to keep.
                 </Point>
             </EditableParagraph>
         </Block>

@@ -124,6 +124,33 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         bgColor: 'rgba(172, 139, 249, 0.20)',
     },
 
+    unitCircleCosValue: {
+        defaultValue: 0.82,
+        type: 'number',
+        label: 'Cosine readout',
+        description: 'Live cos theta of the point on the unit circle, shown read-only inside the formula',
+        min: -1, max: 1, step: 0.01,
+        color: '#8E90F5',
+    },
+
+    unitCircleSinValue: {
+        defaultValue: 0.57,
+        type: 'number',
+        label: 'Sine readout',
+        description: 'Live sin theta of the point on the unit circle, shown read-only inside the formula',
+        min: -1, max: 1, step: 0.01,
+        color: '#AC8BF9',
+    },
+
+    unitCircleRadiusHighlight: {
+        defaultValue: '',
+        type: 'linkedHighlight',
+        label: 'Unit circle radius highlight',
+        description: 'Highlight trigger coloured for the slanted side, the radius of length one',
+        color: '#62CCF9',
+        bgColor: 'rgba(98, 204, 249, 0.20)',
+    },
+
     triangleExplored: {
         defaultValue: false,
         type: 'boolean',
@@ -254,6 +281,17 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         type: 'boolean',
         label: 'Both squares packed',
         description: 'Set to true once both squares have been packed into the unit square',
+    },
+
+    answerSquaresTotal: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Total the two squares fill',
+        description: 'Student answer typed inside the identity formula: what the two squares add up to',
+        placeholder: '???',
+        correctAnswer: ['1', '1.0', 'one'],
+        color: '#F8A0CD',
+        bgColor: 'rgba(248, 160, 205, 0.20)',
     },
 
     squaresHighlight: {
@@ -401,6 +439,27 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Set to true once the student has hit the target cosine',
     },
 
+    applySinMagnitude: {
+        defaultValue: 0.8,
+        type: 'number',
+        label: 'Sine size from the target cosine',
+        description: 'Live square root of one minus the target cosine squared, shown read-only in the formula',
+        min: 0, max: 1, step: 0.01,
+        color: '#AC8BF9',
+    },
+
+    answerApplySign: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Sign in front of the square root',
+        description: 'Student answer inside the formula: which sign belongs in front of the square root',
+        placeholder: '???',
+        correctAnswer: '\u00b1',
+        options: ['+', '\u2212', '\u00b1'],
+        color: '#AC8BF9',
+        bgColor: 'rgba(172, 139, 249, 0.20)',
+    },
+
     applyHighlight: {
         defaultValue: '',
         type: 'linkedHighlight',
@@ -463,6 +522,17 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         description: 'Highlight trigger coloured for the forward (cosine) part of the pull',
         color: '#8E90F5',
         bgColor: 'rgba(142, 144, 245, 0.20)',
+    },
+
+    sledLiftTarget: {
+        defaultValue: 0.57,
+        type: 'number',
+        label: 'Lift you will put up with',
+        description: 'Scrub the lifting share you accept; the rope angle follows from it, which is the identity used backwards',
+        min: 0.26,
+        max: 0.98,
+        step: 0.01,
+        color: '#AC8BF9',
     },
 
     joystickAngle: {
