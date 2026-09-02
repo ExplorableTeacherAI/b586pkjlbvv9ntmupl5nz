@@ -415,7 +415,7 @@ export const squaresThatAddToOneBlocks: ReactElement[] = [
     <StackLayout key="layout-squares-heading" maxWidth="xl">
         <Block id="squares-heading" padding="md">
             <EditableH2 id="h2-squares-heading" blockId="squares-heading">
-                Squares That Add to One
+                The Identity sin²θ + cos²θ = 1
             </EditableH2>
         </Block>
     </StackLayout>,

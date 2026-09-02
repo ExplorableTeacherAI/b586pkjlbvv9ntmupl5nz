@@ -9,7 +9,7 @@ export const unitCircleConclusionBlocks: ReactElement[] = [
     <StackLayout key="layout-conclusion-heading" maxWidth="xl">
         <Block id="conclusion-heading" padding="md">
             <EditableH2 id="h2-conclusion-heading" blockId="conclusion-heading">
-                Wrapping Up
+                Summary
             </EditableH2>
         </Block>
     </StackLayout>,

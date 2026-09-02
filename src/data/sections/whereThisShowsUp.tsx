@@ -530,7 +530,7 @@ export const whereThisShowsUpBlocks: ReactElement[] = [
     <StackLayout key="layout-applications-heading" maxWidth="xl">
         <Block id="applications-heading" padding="md">
             <EditableH2 id="h2-applications-heading" blockId="applications-heading">
-                Where This Shows Up
+                Applications of the Identity
             </EditableH2>
         </Block>
     </StackLayout>,

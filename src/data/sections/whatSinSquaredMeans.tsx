@@ -378,7 +378,7 @@ export const whatSinSquaredMeansBlocks: ReactElement[] = [
     <StackLayout key="layout-notation-heading" maxWidth="xl">
         <Block id="notation-heading" padding="md">
             <EditableH2 id="h2-notation-heading" blockId="notation-heading">
-                What sin²θ Really Means
+                Notation: sin²θ and cos²θ
             </EditableH2>
         </Block>
     </StackLayout>,

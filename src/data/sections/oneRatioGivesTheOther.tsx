@@ -319,7 +319,7 @@ export const oneRatioGivesTheOtherBlocks: ReactElement[] = [
     <StackLayout key="layout-apply-heading" maxWidth="xl">
         <Block id="apply-heading" padding="md">
             <EditableH2 id="h2-apply-heading" blockId="apply-heading">
-                One Ratio Gives You the Other
+                Finding cos θ from sin θ
             </EditableH2>
         </Block>
     </StackLayout>,

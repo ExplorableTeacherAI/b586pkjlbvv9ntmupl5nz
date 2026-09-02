@@ -344,7 +344,7 @@ export const turningPastNinetyBlocks: ReactElement[] = [
     <StackLayout key="layout-quadrants-heading" maxWidth="xl">
         <Block id="quadrants-heading" padding="md">
             <EditableH2 id="h2-quadrants-heading" blockId="quadrants-heading">
-                Turning Past 90°
+                Angles Beyond 90°: Signs in Each Quadrant
             </EditableH2>
         </Block>
     </StackLayout>,

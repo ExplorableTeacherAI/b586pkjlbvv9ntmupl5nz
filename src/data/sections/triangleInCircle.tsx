@@ -299,7 +299,7 @@ export const triangleInCircleBlocks: ReactElement[] = [
     <StackLayout key="layout-triangle-heading" maxWidth="xl">
         <Block id="triangle-heading" padding="md">
             <EditableH2 id="h2-triangle-heading" blockId="triangle-heading">
-                A Triangle Hidden in a Circle
+                The Right-Angled Triangle in the Unit Circle
             </EditableH2>
         </Block>
     </StackLayout>,
