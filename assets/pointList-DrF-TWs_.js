@@ -1,1 +1,0 @@
-import{j as t}from"./index-CtVxvGxC.js";function a({children:e}){return t.jsxs("span",{className:"relative block indent-0 pl-5 mt-1.5 first:mt-0",children:[t.jsx("span",{className:"absolute left-0 text-foreground/40","aria-hidden":"true",children:"•"}),e]})}const n="space-y-1.5";export{n as POINT_LIST_CLASS,a as Point,a as default};
