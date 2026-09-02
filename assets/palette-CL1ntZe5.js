@@ -1,0 +1,1 @@
+const E="#334155",c="#64748B",U="#CBD5E1",s="#62D0AD",a=s,o="#8E90F5",t="#AC8BF9",n="#62CCF9",H="#F8A0CD",_="#F7B23B",A="#94A3B8",T="#22c55e";export{s as A,o as C,T as F,a as H,U as I,n as R,t as S,_ as T,H as a,c as b,E as c,A as d};
